@@ -21,15 +21,15 @@ rt.close()
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
-import { createRuntime } from "ailoy-node";
+import { startRuntime } from "ailoy-node";
 
 // The runtime must be instantiated to use Ailoy
-const rt = await createRuntime();
+const rt = await startRuntime();
 
 // ... (your code) ...
 
-# Close the runtime
-await rt.close()
+# Stop the runtime
+await rt.stop()
 ```
 </TabItem>
 </Tabs>
@@ -63,7 +63,7 @@ import { createAgent } from "ailoy-node";
 
 // Initialize runtime.
 // During this step, the model parameters are downloaded and the LLM is set up for execution
-agent = await createAgent(rt, {model: {name: "qwen3-0.6b"}})
+const agent = await createAgent(rt, {model: {name: "qwen3-0.6b"}})
 
 // ... (your code) ...
 
@@ -91,7 +91,7 @@ print()
 ```typescript
 // This is where the actual LLM call happens
 for await (const resp of ex.run("Please give me a short poem about AI")) {
-  process.stdout.write(resp.content);
+  process.stdout.write(`${resp.content}`);
 }
 process.stdout.write("\n");
 ```
@@ -139,32 +139,34 @@ print()
 # Once the agent is no longer needed, it can be released
 agent.deinitialize()
 
-# Close the runtime
+# Stop the runtime
 rt.close()
 ```
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
-import { createRuntime, createAgent } from "ailoy-node";
+import { startRuntime, createAgent } from "ailoy-node";
 
-// The runtime must be instantiated to use Ailoy
-const rt = await createRuntime();
+(async () => {
+  // The runtime must be instantiated to use Ailoy
+  const rt = await startRuntime();
 
-// Initialize runtime.
-// During this step, the model parameters are downloaded and the LLM is set up for execution
-agent.initialize()
+  // Initialize runtime.
+  // During this step, the model parameters are downloaded and the LLM is set up for execution
+  const agent = await createAgent(rt, {model: {name: "qwen3-0.6b"}})
 
-// This is where the actual LLM call happens
-for await (const resp of ex.run("Please give me a short poem about AI")) {
-  process.stdout.write(resp.content);
-}
-process.stdout.write("\n");
+  // This is where the actual LLM call happens
+  for await (const resp of ex.run("Please give me a short poem about AI")) {
+    process.stdout.write(`${resp.content}`);
+  }
+  process.stdout.write("\n");
 
-// Once the agent is no longer needed, it can be released
-agent.deinitialize()
+  // Once the agent is no longer needed, it can be released
+  await agent.deinitialize()
 
-// Close the runtime
-await rt.close()
+  // Stop the runtime
+  await rt.stop()
+})();
 ```
 </TabItem>
 </Tabs>

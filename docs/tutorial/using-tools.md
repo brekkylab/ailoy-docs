@@ -26,11 +26,12 @@ Let's take a quick look at how tool calling works in general. In most agent syst
 
 (5) Assistant can incorporate the tool's output to produce a more accurate answer.
 
-## Using tool calls in Ailoy
+## Building an Agent with Tool Support
 
-Now let me explain how to use tool calling in Ailoy. In this example, we’ll use the [Frankfurters API](https://frankfurter.dev/) to add real-time exchange rate lookup functionality.
+Now, let's see how to make an agent tool-aware in Ailoy.
+In this example, we’ll use the [Frankfurters API](https://frankfurter.dev/) to add real-time exchange rate lookup functionality.
 
-First step is defining a tool.
+The first step is to define a tool.
 
 <Tabs>
 <TabItem value="py" label="Python">
@@ -71,7 +72,7 @@ agent.add_restapi_tool(frankfurters)
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
-const rt = await createRuntime();
+const rt = await startRuntime();
 const agent = await createAgent(rt, {model: {name: "qwen3-8b"}});
 
 const frankfurters = {
@@ -127,7 +128,7 @@ agent.add_tools_from_preset("frankfurter")
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
-agent.add_tools_from_preset("frankfurter");
+agent.addToolsFromPreset("frankfurter");
 ```
 </TabItem>
 </Tabs>
@@ -154,31 +155,77 @@ process.stdout.write("\n");
 </TabItem>
 </Tabs>
 
-(TODO) console output
+The output looks like this:
+```
+id='call_fe4b76ff-021c-409b-a835-df83b425f35e' type='function' function=ToolCallFunction(name='frankfurter', arguments={'symbols': 'USD,CNY', 'base': 'KRW'})role='tool' name='frankfurter' tool_call_id='call_fe4b76ff-021c-409b-a835-df83b425f35e' content='{"CNY": 0.00516, "USD": 0.00072}'To buy 250 U.S. Dollars (USD) and 350 Chinese Yuan (CNY) using Korean Won (KRW), you need to calculate the total amount of KRW required based on the exchange rates:
+
+- **1 USD = 0.00072 KRW**
+- **1 CNY = 0.00516 KRW**
+
+### Step 1: Calculate KRW for USD
+$$ 250 \, \text{USD} \times \frac{1}{0.00072} = 250 \, \text{USD} \times 1388.89 \approx 347,222 \, \text{KRW} $$
+
+### Step 2: Calculate KRW for CNY
+$$ 350 \, \text{CNY} \times \frac{1}{0.00516} = 350 \, \text{CNY} \times 193.88 \approx 67,858 \, \text{KRW} $$
+
+### Step 3: Add both amounts
+$$ 347,222 \, \text{KRW} + 67,858 \, \text{KRW} = 415,080 \, \text{KRW} $$
+
+### Final Answer:
+You need approximately **415,080 Korean Won** to buy 250 USD and 350 CNY.
+```
 
 ## Full source code
 
+<Tabs>
+<TabItem value="py" label="Python">
 ```python
-from ailoy import AsyncRuntime, Agent
+from ailoy import Runtime, Agent
 
-rt = AsyncRuntime()
+rt = Runtime()
 
 agent = Agent(rt, model_name="qwen3-8b")
-
-await agent.initialize()
+agent.initialize()
 
 # Attach frankfurter's API
 agent.add_tools_from_preset("frankfurter")
 
 question = "I want to buy 250 U.S. Dollar and 350 Chinese Yuan with my Korean Won. How much do I need to take?"
-async for resp in agent.run(question):
-    print(resp.content, end='')
+for resp in agent.run(question):
+    print(resp.content, end="")
 print()
 
-await agent.deinitialize()
+agent.deinitialize()
 
 rt.close()
 ```
+</TabItem>
+<TabItem value="node" label="JavaScript(Node)">
+```typescript
+import { startRuntime, createAgent } from "ailoy";
+
+(async () => {
+  const rt = await startRuntime();
+
+  const agent = await createAgent(rt, { model: { name: "qwen3-8b" } });
+
+  // Attach frankfurter's API
+  agent.addToolsFromPreset("frankfurter");
+
+  const question =
+    "I want to buy 250 U.S. Dollar and 350 Chinese Yuan with my Korean Won. How much do I need to take?";
+  for await (const resp of agent.run(question)) {
+    process.stdout.write(`${resp.content}`);
+  }
+  process.stdout.write("\n");
+
+  await agent.deinitialize();
+
+  await rt.stop();
+})();
+```
+</TabItem>
+</Tabs>
 
 :::note
 Tools aren't free — every token counts.
