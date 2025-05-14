@@ -1,3 +1,5 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import ToolStructureSvg from './img/tool-structure.svg';
 
 # Using Tools
@@ -30,10 +32,12 @@ Now let me explain how to use tool calling in Ailoy. In this example, we’ll us
 
 First step is defining a tool.
 
+<Tabs>
+<TabItem value="py" label="Python">
 ```python
-rt = AsyncRuntime()
-agent = Agent(rt, model_name="qwen3-0.6b")
-await agent.initialize()
+rt = Runtime()
+agent = Agent(rt, model_name="qwen3-8b")
+agent.initialize()
 
 frankfurters = {
   "type": "restapi",
@@ -49,12 +53,9 @@ frankfurters = {
             },
             "symbols": {
                 "type": "string",
-                "description": "The target ISO 4217 currency codes separated by comma; if not given, targets will be every existing codes."
+                "description": "The target ISO 4217 currency codes separated by comma."
             }
         },
-        "required": [
-            "base"
-        ]
     }
   },
   "behavior": {
@@ -67,29 +68,91 @@ frankfurters = {
 }
 agent.add_restapi_tool(frankfurters)
 ```
+</TabItem>
+<TabItem value="node" label="JavaScript(Node)">
+```typescript
+const rt = await createRuntime();
+const agent = await createAgent(rt, {model: {name: "qwen3-8b"}});
 
-Here, we can see that the definition of the tool consists of two parts: `description` and `behavior`.
+const frankfurters = {
+  type: "restapi",
+  description: {
+    name: "frankfurter",
+    description: "Get the latest currency exchange rates of target currencies based on the 'base' currency",
+    parameters: {
+        type: "object",
+        properties: {
+            base: {
+                type: "string",
+                description: "The ISO 4217 currency code to be the divider of the currency rate to be got."
+            },
+            symbols: {
+                type: "string",
+                description: "The target ISO 4217 currency codes separated by comma."
+            }
+        }
+    }
+  },
+  behavior: {
+    baseURL: "https://api.frankfurter.dev/v1/latest",
+    method: "GET",
+    headers: {
+      accept: "application/json"
+    }
+  },
+};
+agent.add_restapi_tool(frankfurters);
+```
+</TabItem>
+</Tabs>
 
-The `description` defines *how* *the AI recognizes and understands the tool*. The format of it follows the one defined in the [Hugging Face Transformers documentation on tool definitions](https://huggingface.co/docs/transformers/v4.51.3/en/chat_templating_writing#tool-definitions).
+The `description` defines how the AI recognizes and understands the tool.
+In contrast, the `behavior` field specifies what should happen when the AI attempts to execute the tool.
+Naturally, the format of the `behavior` depends on its type.
+In this example, since we are using a REST API tool, the behavior includes the API’s URL, HTTP method, and headers.
 
-In contrast, the `behavior` specifies *what should be happen when the AI requests to execute the tool*. The schema depends on it’s type. In this case, since we are defining a **REST API tool**, the behavior includes the REST API’s URL, method, and headers.
+:::info
+For more details about tool definitions, see the [Tools](../tools) section.
+:::
 
-For the ease of implementation, Ailoy provides presets for several common tools. **(TODO)** For the full list of available presets, please refer to the documentation.
+For the ease of implementation, Ailoy provides presets for several commonly used tools, including the Frankfurters API.
 
-If a preset is available, the agent can be defined as simply as the following:
+If you find a proper tool from preset, you can simply imports it into the agent:
 
+<Tabs>
+<TabItem value="py" label="Python">
 ```python
 agent.add_tools_from_preset("frankfurter")
 ```
+</TabItem>
+<TabItem value="node" label="JavaScript(Node)">
+```typescript
+agent.add_tools_from_preset("frankfurter");
+```
+</TabItem>
+</Tabs>
 
-By calling `query` function, you can see that the agent uses the Frankfurters API to incorporate real-time exchange rate information into its response.
+By calling `run` function, you can see that the agent uses the Frankfurters API to incorporate real-time exchange rate information into its response.
 
+<Tabs>
+<TabItem value="py" label="Python">
 ```python
 question = "I want to buy 250 U.S. Dollar and 350 Chinese Yuan with my Korean Won. How much do I need to take?"
-async for resp in agent.query(question):
+async for resp in agent.run(question):
     print(resp.content, end='')
 print()
 ```
+</TabItem>
+<TabItem value="node" label="JavaScript(Node)">
+```typescript
+const question = "I want to buy 250 U.S. Dollar and 350 Chinese Yuan with my Korean Won. How much do I need to take?";
+for await (const resp in agent.run(question)) {
+    process.stdout.write(resp.content);
+}
+process.stdout.write("\n");
+```
+</TabItem>
+</Tabs>
 
 (TODO) console output
 
