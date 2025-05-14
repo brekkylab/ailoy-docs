@@ -1,6 +1,3 @@
----
-sidebar_position: 3
----
 # Integrate with MCP
 
 The **Model Context Protocol (MCP)** is an open protocol developed by Anthropic to standardize how language models interact with external systems—such as tools, memory backends, and context managers. MCP enables structured, dynamic communication between an LLM and its environment, empowering models to access external tools, retrieve real-time information, and perform complex, multi-step reasoning.

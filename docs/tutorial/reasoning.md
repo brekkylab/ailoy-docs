@@ -1,6 +1,3 @@
----
-sidebar_position: 1
----
 # Reasoning
 
 Reasoning is a functionality of AI that can handle more complex tasks through explicit logical reasoning. It breaks down problems into smaller sub-steps and reveals intermediate reasoning stages.

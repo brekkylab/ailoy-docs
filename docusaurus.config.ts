@@ -76,9 +76,9 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
+          sidebarId: 'documentSidebar',
           position: 'left',
-          label: 'Tutorial',
+          label: 'Documents',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
@@ -96,7 +96,7 @@ const config: Config = {
           items: [
             {
               label: 'Tutorial',
-              to: '/docs/intro',
+              to: '/docs/tutorial/getting-started',
             },
           ],
         },
@@ -126,12 +126,12 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/brekkylab/ailoy',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} Brekkylab, Inc. Built with Docusaurus.`,
     },
     prism: {
       theme: prismThemes.github,

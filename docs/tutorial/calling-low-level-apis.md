@@ -1,6 +1,3 @@
----
-sidebar_position: 4
----
 import AiloyInternalSvg from './img/ailoy-internal.svg';
 
 # Calling low-level APIs
