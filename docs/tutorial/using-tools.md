@@ -2,11 +2,17 @@ import ToolStructureSvg from './img/tool-structure.svg';
 
 # Using Tools
 
-One of the great features of the Ailoy is an its’ agent capability. By defining `Agent`, your LLM can be connected with external APIs. These can provide real-time or domain-specific information that the LLM has not been trained on. Thus, these enable the functionality to give answers beyond the capabilities of a vanilla LLM.
+One of the most powerful features in Ailoy is the **tool calling system**.
+It allows you to extend the capabilities of your LLM by connecting it to external APIs or tools.
+This way, your agent can access real-time or domain-specific information, even if it wasn’t part of the model’s original training data.
+You can attach an agent for a custom service you’ve built, like whether or location.
+You could also build financial decision-making app with real-time exchange rate or stock price.
+
+## How tool calling works
 
 Let's take a quick look at how tool calling works in general. In most agent system, tool calling can be achieved by the following process.
 
-<ToolStructureSvg style={{ width: "50%", height: "50%" }}/>
+<ToolStructureSvg style={{ width: "40%", height: "40%" }}/>
 
 (1) \[Tool Description\] Assistant (or LLM) can recognize a tool based on its description (at it’s initialization).
 
@@ -18,7 +24,9 @@ Let's take a quick look at how tool calling works in general. In most agent syst
 
 (5) Assistant can incorporate the tool's output to produce a more accurate answer.
 
-Now let me explain how to use tool calling in Ailoy. In this example, we’ll use the **[Frankfurters](https://frankfurter.dev/) API** to add real-time exchange rate lookup functionality.
+## Using tool calls in Ailoy
+
+Now let me explain how to use tool calling in Ailoy. In this example, we’ll use the [Frankfurters API](https://frankfurter.dev/) to add real-time exchange rate lookup functionality.
 
 First step is defining a tool.
 
@@ -85,7 +93,7 @@ print()
 
 (TODO) console output
 
-Full source code:
+## Full source code
 
 ```python
 from ailoy import AsyncRuntime, Agent
@@ -109,6 +117,12 @@ await agent.deinitialize()
 rt.close()
 ```
 
-## Notes
+:::note
+Tools aren't free — every token counts.
 
-* Tools are not free / Context is finite: Every token counts. Avoid sending unnecessary data to keep the prompt efficient and focused.
+Calling external APIs or running local AI models consumes real resources.
+If you're using an API, you might encounter unexpectedly high bills.
+If you're using on-device AI, your system can slow down or even crash.
+
+Avoid sending unnecessary data. Keep your chat context focused and concise.
+:::

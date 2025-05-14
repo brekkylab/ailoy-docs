@@ -1,30 +1,78 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Reasoning
 
-Reasoning is a functionality of AI that can handle more complex tasks through explicit logical reasoning. It breaks down problems into smaller sub-steps and reveals intermediate reasoning stages.
+Reasoning is an advanced capability of AI that enables it to tackle complex tasks through explicit, step-by-step logical inference.
+Reasoning models break down problems into smaller sub-tasks rather than solving them in a single pass.
+Compared to direct answer generation, it offers two key advantages:
 
-Using a reasoning AI is well-suited for handling complex tasks such as scientific reasoning or legal interpretation. However, since the reasoning process requires more computation and memory, you should decide whether to enable the reasoning option based on requirements.
+1. Improved problem-solving intelligence
+2. Transparent and traceable intermediate reasoning steps
 
-In Ailoy, you can easily enable a reasoning model with a simple option. If you'd like to use reasoning, you can activate it as shown below:
+This functionality is particularly well-suited for domains that require multi-step reasoning, such as scientific analysis, legal interpretation, or strategic decision-making.
+However, since the reasoning step needs additional computation and memory usage, it can increase latency and overall resource consumption.
+Therefore, it’s important to enable reasoning only when necessary, based on the complexity of your use case.
 
+In Ailoy, You can activate it by simply specifying an option:
+
+<Tabs>
+<TabItem value="py" label="Python">
 ```python
-# This is where the actual LLM call happens
 async for resp in agent.run(
   "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
-  do_reasoning=True
+  enable_reasoning=True
 ):
   print(resp.content, end='')
 print()
 ```
+</TabItem>
+<TabItem value="node" label="JavaScript(Node)">
+```typescript
+for await (
+  const resp of ex.run(
+    "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
+    enableReasoning=true
+  )
+) {
+  process.stdout.write(resp.content);
+}
+process.stdout.write("\n");
+```
+</TabItem>
+</Tabs>
 
 Since reasoning is an internal process, you may not want to include it in the output. In such cases, you can use the `ignore_reasoning` option to exclude it from the output.
 
+<Tabs>
+<TabItem value="py" label="Python">
 ```python
-# This is where the actual LLM call happens
 async for resp in agent.run(
   "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
-  reasoning=True,
-  ignore_reasoning=True
+  enable_reasoning=True,
+  ignore_reasoning_messages=True
 ):
   print(resp.content, end='')
 print()
 ```
+</TabItem>
+<TabItem value="node" label="JavaScript(Node)">
+```typescript
+for await (
+  const resp of ex.run(
+    "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
+    enableReasoning=true,
+    ignoreReasoningMessages=true
+  )
+) {
+  process.stdout.write(resp.content);
+}
+process.stdout.write("\n");
+```
+</TabItem>
+</Tabs>
+
+:::note
+Note: Qwen3-0.6b is too small to perform effective reasoning.
+We recommend using a model with more parameters for reasoning tasks.
+:::
