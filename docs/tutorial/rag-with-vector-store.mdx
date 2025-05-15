@@ -246,9 +246,9 @@ async function main() {
 
   // Augment user query
   const prompt = `
-      Based on the provided contexts, try to answer user' question.
-      Context: ${items.map((item) => item.document)}
-      Question: ${query}
+    Based on the provided contexts, try to answer user' question.
+    Context: ${items.map((item) => item.document)}
+    Question: ${query}
   `;
 
   // Invoke agent
