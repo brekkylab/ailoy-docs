@@ -201,12 +201,12 @@ rt.stop()
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
-import { startRuntime, defineAgent } from "ailoy";
+import { startRuntime, defineAgent } from "ailoy-node";
 
 (async () => {
   const rt = await startRuntime();
 
-  const agent = await defineAgent(rt, { model: { name: "qwen3-8b" } });
+  const agent = await defineAgent(rt, "qwen3-8b");
 
   // Attach frankfurter's API
   agent.addToolsFromPreset("frankfurter");
