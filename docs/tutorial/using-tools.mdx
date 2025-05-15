@@ -1,5 +1,6 @@
 import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
 import TabItem from "@theme/TabItem";
+import TerminalBox from '@site/src/components/TerminalBox';
 
 import ToolStructureSvg from "./img/tool-structure.svg";
 
@@ -180,9 +181,10 @@ process.stdout.write("\n");
 </TabItem>
 </CodeTabs>
 
-The output looks like this:
+Here's what the output will look like:
 
-```shell
+<TerminalBox>
+{`
 id='call_fe4b76ff-021c-409b-a835-df83b425f35e' type='function' function=ToolCallFunction(name='frankfurter', arguments={'symbols': 'USD,CNY', 'base': 'KRW'})role='tool' name='frankfurter' tool_call_id='call_fe4b76ff-021c-409b-a835-df83b425f35e' content='{"CNY": 0.00516, "USD": 0.00072}'To buy 250 U.S. Dollars (USD) and 350 Chinese Yuan (CNY) using Korean Won (KRW), you need to calculate the total amount of KRW required based on the exchange rates:
 
 - **1 USD = 0.00072 KRW**
@@ -199,7 +201,8 @@ $$ 347,222 \, \text{KRW} + 67,858 \, \text{KRW} = 415,080 \, \text{KRW} $$
 
 ### Final Answer:
 You need approximately **415,080 Korean Won** to buy 250 USD and 350 CNY.
-```
+`}
+</TerminalBox>
 
 ## Complete Example
 
