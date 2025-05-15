@@ -30,7 +30,7 @@ print()
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
 for await (
-  const resp of ex.run(
+  const resp of agent.run(
     "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
     enableReasoning=true
   )
@@ -59,7 +59,7 @@ print()
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
 for await (
-  const resp of ex.run(
+  const resp of agent.run(
     "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
     enableReasoning=true,
     ignoreReasoningMessages=true
