@@ -25,9 +25,10 @@ To initialize a vector store:
 
 ```python showLineNumbers
 from ailoy import Runtime
-from ailoy.vectorstore import VectorStore, FAISSConfig
+from ailoy.vectorstore import VectorStore
 
-rt = Runtime() with VectorStore(rt, FAISSConfig(embedding="bge-m3")) as vs:
+rt = Runtime()
+with VectorStore(rt, "bge-m3", "faiss") as vs:
     ...
 ```
 
@@ -35,14 +36,10 @@ rt = Runtime() with VectorStore(rt, FAISSConfig(embedding="bge-m3")) as vs:
 <TabItem {...nodeTab}>
 
 ```typescript showLineNumbers
-import { createRuntime, VectorStore } from "ailoy-node";
+import { startRuntime, defineVectorStore } from "ailoy-node";
 
-const rt = await createRuntime();
-const vs = new VectorStore(rt, {
-  type: "faiss",
-  embedding: "bge-m3",
-});
-await vs.initialize();
+const rt = await startRuntime();
+const vs = await defineVectorStore(rt, "bge-m3", "faiss");
 ```
 
 </TabItem>
@@ -180,8 +177,7 @@ process.stdout.write("\n");
 <TabItem {...pythonTab}>
 
 ```python showLineNumbers
-from ailoy import Runtime
-from ailoy.vectorstore import VectorStore, FAISSConfig
+from ailoy import Runtime, Agent, VectorStore
 
 # Initialize Runtime
 
@@ -189,7 +185,7 @@ rt = Runtime()
 
 # Initialize Agent and VectorStore
 
-with Agent(rt, model_name="qwen3-8b") as agent, VectorStore(rt, FAISSConfig(embedding="bge-m3")) as vs:
+with Agent(rt, "qwen3-8b") as agent, VectorStore(rt, "bge-m3", "faiss") as vs:
     # Insert items
     vs.insert(
         "Ailoy is a lightweight library for building AI applications",
@@ -218,18 +214,15 @@ with Agent(rt, model_name="qwen3-8b") as agent, VectorStore(rt, FAISSConfig(embe
 <TabItem {...nodeTab}>
 
 ```typescript showLineNumbers
-import { createRuntime, createAgent, createVectorStore } from "ailoy-node";
+import { createRuntime, defineAgent, defineVectorStore } from "ailoy-node";
 
 async function main() {
   // Initialize Runtime
   const rt = await createRuntime();
   // Initialize Agent
-  const agent = await createAgent(rt, { model: { name: "qwen3-8b" } });
+  const agent = await defineAgent(rt, "qwen3-8b");
   // Initialize VectorStore
-  const vs = await createVectorStore(rt, {
-    type: "faiss",
-    embedding: "bge-m3",
-  });
+  const vs = await defineVectorStore(rt, "bge-m3", "faiss");
 
   // Insert items
   await vs.insert({
