@@ -17,15 +17,11 @@ Let's take a quick look at how tool calling works in general. In most agent syst
 
 <ToolStructureSvg style={{ width: "40%", height: "40%" }}/>
 
-(1) \[Tool Description\] Assistant (or LLM) can recognize a tool based on its description (at it’s initialization).
-
-(2) User provides an input prompt to the assistant.
-
-(3) \[Tool Call\] If the user's question is related to a tool, the assistant can invoke the tool using the specified format.
-
-(4) \[Tool Result\] Tool performs its task and returns a response.
-
-(5) Assistant can incorporate the tool's output to produce a more accurate answer.
+- (1) \[Tool Description\] Assistant (or LLM) can recognize a tool based on its description (at it’s initialization).
+- (2) User provides an input prompt to the assistant.
+- (3) \[Tool Call\] If the user's question is related to a tool, the assistant can invoke the tool using the specified format.
+- (4) \[Tool Result\] Tool performs its task and returns a response.
+- (5) Assistant can incorporate the tool's output to produce a more accurate answer.
 
 ## Building an Agent with Tool Support
 
@@ -229,9 +225,10 @@ import { startRuntime, defineAgent } from "ailoy-node";
 :::warning
 Tools aren't free — every token counts.
 
-Calling external APIs or running local AI models consumes real resources.
-If you're using an API, you might encounter unexpectedly high bills.
-If you're using on-device AI, your system can slow down or even crash.
+Using many tools can generate a large amount of information for the AI to process, resulting in longer context lengths.
 
-Avoid sending unnecessary data. Keep your chat context focused and concise.
+Whether you're running AI through external APIs or using on-device models, it consumes resources.
+API usage can lead to unexpectedly high bills, while on-device AI may slow down your machine or even cause it to crash.
+
+Avoid using unnecessary tools. Keep your chat context focused and concise.
 :::
