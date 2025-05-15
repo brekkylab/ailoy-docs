@@ -23,7 +23,7 @@ In Ailoy, You can activate it by simply specifying an option:
 <CodeTabs>
 <TabItem {...pythonTab}>
 
-```python
+```python showLineNumbers
 async for resp in agent.run(
   "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
   enable_reasoning=True
@@ -35,7 +35,7 @@ print()
 </TabItem>
 <TabItem {...nodeTab}>
 
-```typescript
+```typescript showLineNumbers
 for await (const resp of agent.run(
   "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
   {
@@ -57,7 +57,7 @@ from the output.
 <CodeTabs>
 <TabItem {...pythonTab}>
 
-```python
+```python showLineNumbers
 async for resp in agent.run(
   "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
   enable_reasoning=True,
@@ -70,7 +70,7 @@ print()
 </TabItem>
 <TabItem {...nodeTab}>
 
-```typescript
+```typescript showLineNumbers
 for await (const resp of agent.run(
   "Please solve me a simultaneous equation: x+y=3, 4x+3y=12",
   {
