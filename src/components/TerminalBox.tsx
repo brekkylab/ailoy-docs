@@ -29,5 +29,4 @@ export default function TerminalBox({ children }: { children: string }) {
       </pre>
     </div>
   );
-  }
-  
+}
