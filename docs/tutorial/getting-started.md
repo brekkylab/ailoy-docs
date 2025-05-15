@@ -45,30 +45,26 @@ In this example, we’ll use Alibaba's [qwen3](https://github.com/QwenLM/Qwen3) 
 ```python
 from ailoy import Agent
 
-agent = Agent(rt, model_name="qwen3-0.6b")
-
-# Initialize runtime.
 # During this step, the model parameters are downloaded and the LLM is set up for execution
-agent.initialize()
+agent = Agent(rt, model_name="qwen3-0.6b")
 
 # ... (your code) ...
 
 # Once the agent is no longer needed, it can be released
-agent.deinitialize()
+agent.delete()
 ```
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
 import { createAgent } from "ailoy-node";
 
-// Initialize runtime.
 // During this step, the model parameters are downloaded and the LLM is set up for execution
 const agent = await createAgent(rt, {model: {name: "qwen3-0.6b"}})
 
 // ... (your code) ...
 
 // Once the agent is no longer needed, it can be released
-await agent.deinitialize()
+await agent.delete()
 ```
 </TabItem>
 </Tabs>
@@ -137,7 +133,7 @@ for resp in agent.run("Please give me a short poem about AI"):
 print()
 
 # Once the agent is no longer needed, it can be released
-agent.deinitialize()
+agent.delete()
 
 # Stop the runtime
 rt.close()
@@ -151,7 +147,6 @@ import { startRuntime, createAgent } from "ailoy-node";
   // The runtime must be instantiated to use Ailoy
   const rt = await startRuntime();
 
-  // Initialize runtime.
   // During this step, the model parameters are downloaded and the LLM is set up for execution
   const agent = await createAgent(rt, {model: {name: "qwen3-0.6b"}})
 
@@ -162,7 +157,7 @@ import { startRuntime, createAgent } from "ailoy-node";
   process.stdout.write("\n");
 
   // Once the agent is no longer needed, it can be released
-  await agent.deinitialize()
+  await agent.delete()
 
   // Stop the runtime
   await rt.stop()
