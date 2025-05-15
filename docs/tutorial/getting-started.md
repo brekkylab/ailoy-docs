@@ -89,7 +89,7 @@ print()
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
 // This is where the actual LLM call happens
-for await (const resp of ex.run("Please give me a short poem about AI")) {
+for await (const resp of agent.run("Please give me a short poem about AI")) {
   process.stdout.write(`${resp.content}`);
 }
 process.stdout.write("\n");
@@ -141,7 +141,7 @@ rt.stop()
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
-import { startRuntime, createAgent } from "ailoy-node";
+import { startRuntime, defineAgent } from "ailoy-node";
 
 (async () => {
   // The runtime must be started to use Ailoy
@@ -151,7 +151,7 @@ import { startRuntime, createAgent } from "ailoy-node";
   const agent = await defineAgent(rt, "qwen3-0.6b");
 
   // This is where the actual LLM call happens
-  for await (const resp of ex.run("Please give me a short poem about AI")) {
+  for await (const resp of agent.run("Please give me a short poem about AI")) {
     process.stdout.write(`${resp.content}`);
   }
   process.stdout.write("\n");
