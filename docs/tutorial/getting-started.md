@@ -3,27 +3,27 @@ import TabItem from '@theme/TabItem';
 
 # Getting started
 
-The very first step to using Ailoy is to define `Runtime`.
+The very first step to using Ailoy is to start a `Runtime`.
 
 <Tabs>
 <TabItem value="py" label="Python">
 ```python
 from ailoy import Runtime
 
-# The runtime must be instantiated to use Ailoy
+# The runtime must be started to use Ailoy
 rt = Runtime()
 
 # ... (your code) ...
 
-# Close the runtime
-rt.close()
+# Stop the runtime
+rt.stop()
 ```
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
 import { startRuntime } from "ailoy-node";
 
-// The runtime must be instantiated to use Ailoy
+// The runtime must be started to use Ailoy
 const rt = await startRuntime();
 
 // ... (your code) ...
@@ -34,7 +34,8 @@ await rt.stop()
 </TabItem>
 </Tabs>
 
-`Runtime` contains Ailoy’s internal engine. The functionality of Ailoy are usually carried out by internal threads called VM.
+The `Runtime` contains Ailoy’s internal engine.
+Most of Ailoy’s functionalities are processed by this internal engine.
 
 The easiest way to use LLM with Ailoy is working with `Agent` class.
 The `Agent` class provides high-level APIs that abstracts Ailoy’s runtime, allowing you to use the functionality of LLM effortlessly.
@@ -45,6 +46,7 @@ In this example, we’ll use Alibaba's [qwen3](https://github.com/QwenLM/Qwen3) 
 ```python
 from ailoy import Agent
 
+# Defines an agent.
 # During this step, the model parameters are downloaded and the LLM is set up for execution
 agent = Agent(rt, model_name="qwen3-0.6b")
 
@@ -56,10 +58,11 @@ agent.delete()
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
-import { createAgent } from "ailoy-node";
+import { defineAgent } from "ailoy-node";
 
-// During this step, the model parameters are downloaded and the LLM is set up for execution
-const agent = await createAgent(rt, {model: {name: "qwen3-0.6b"}})
+# Defines an agent.
+# During this step, the model parameters are downloaded and the LLM is set up for execution
+const agent = await defineAgent(rt, "qwen3-0.6b")
 
 // ... (your code) ...
 
@@ -115,17 +118,14 @@ Putting it all together, the complete code looks like this:
 <Tabs>
 <TabItem value="py" label="Python">
 ```python
-from ailoy import AsyncRuntime, Agent
+from ailoy import Runtime, Agent
 
-# The runtime must be instantiated to use Ailoy
+# The runtime must be started to use Ailoy
 rt = Runtime()
 
-# An agent is created on runtime
-agent = Agent(rt, model_name="qwen3-0.6b")
-
-# Initialize runtime.
+# Defines an agent.
 # During this step, the model parameters are downloaded and the LLM is set up for execution
-agent.initialize()
+agent = Agent(rt, model_name="qwen3-0.6b")
 
 # This is where the actual LLM call happens
 for resp in agent.run("Please give me a short poem about AI"):
@@ -136,7 +136,7 @@ print()
 agent.delete()
 
 # Stop the runtime
-rt.close()
+rt.stop()
 ```
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
@@ -144,11 +144,11 @@ rt.close()
 import { startRuntime, createAgent } from "ailoy-node";
 
 (async () => {
-  // The runtime must be instantiated to use Ailoy
+  // The runtime must be started to use Ailoy
   const rt = await startRuntime();
 
   // During this step, the model parameters are downloaded and the LLM is set up for execution
-  const agent = await createAgent(rt, {model: {name: "qwen3-0.6b"}})
+  const agent = await defineAgent(rt, "qwen3-0.6b");
 
   // This is where the actual LLM call happens
   for await (const resp of ex.run("Please give me a short poem about AI")) {

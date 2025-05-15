@@ -39,7 +39,6 @@ The first step is to define a tool.
 ```python
 rt = Runtime()
 agent = Agent(rt, model_name="qwen3-8b")
-agent.initialize()
 
 frankfurters = {
   "type": "restapi",
@@ -74,7 +73,7 @@ agent.add_restapi_tool(frankfurters)
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
 const rt = await startRuntime();
-const agent = await createAgent(rt, {model: {name: "qwen3-8b"}});
+const agent = await defineAgent(rt, {model: {name: "qwen3-8b"}});
 
 const frankfurters = {
   type: "restapi",
@@ -186,7 +185,6 @@ from ailoy import Runtime, Agent
 rt = Runtime()
 
 agent = Agent(rt, model_name="qwen3-8b")
-agent.initialize()
 
 # Attach frankfurter's API
 agent.add_tools_from_preset("frankfurter")
@@ -198,17 +196,17 @@ print()
 
 agent.delete()
 
-rt.close()
+rt.stop()
 ```
 </TabItem>
 <TabItem value="node" label="JavaScript(Node)">
 ```typescript
-import { startRuntime, createAgent } from "ailoy";
+import { startRuntime, defineAgent } from "ailoy";
 
 (async () => {
   const rt = await startRuntime();
 
-  const agent = await createAgent(rt, { model: { name: "qwen3-8b" } });
+  const agent = await defineAgent(rt, { model: { name: "qwen3-8b" } });
 
   // Attach frankfurter's API
   agent.addToolsFromPreset("frankfurter");
