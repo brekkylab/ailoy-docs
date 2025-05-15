@@ -1,0 +1,53 @@
+import AiloyInternalSvg from "./img/ailoy-internal.svg";
+
+# Calling low-level APIs
+
+As mentioned earlier, the `Agent` is essentially a wrapper around the `Runtime`.
+In a nutshell, a component called the `VM` is responsible for handling
+compute-intensive tasks, such as LLM inference. The `Runtime` serves as a bridge
+between the user and the `VM`, delegating user requests to the `VM` and
+forwarding results back from the `VM` to the user.
+
+<AiloyInternalSvg style={{ width: "50%", height: "50%" }} />
+
+By using the `Runtime` directly, you can send requests to the `VM` yourself.
+This is useful when you need more advanced configuration or want to call APIs
+that are not available through the high-level Agent interface.
+
+Let’s take a look at how the lower-level API works using the `split_text`
+operator, which transforms a long document into a set of smaller chunks. The
+`spit_text` operation is essential for tasks like Retrieval-Augmented Generation
+(RAG).
+
+For this example, we’ll use Lev Tolstoy’s
+[What Men Live by](https://www.gutenberg.org/files/6157/6157-h/6157-h.htm) as
+the reference text.
+
+```python
+from ailoy import Runtime
+
+rt = Runtime()
+
+with open("what_men_live_by.txt") as f:
+    text = f.read()
+
+result = rt.call("split_text", {"text": text})
+chunks = result["chunks"]
+
+print(len(chunks))  # == 12
+
+# Print chunks
+print("********************** First chunk **********************")
+print(chunks[0])
+print()
+print("********************** Second chunk *********************")
+print()
+print(chunks[1])
+print("*********************************************************")
+
+rt.stop()
+```
+
+TODO(console output)
+
+TODO See low-level API reference for details.
