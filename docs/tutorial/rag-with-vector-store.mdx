@@ -1,36 +1,43 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-import CodeTabs from "@site/src/components/CodeTabs";
+import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
+import TabItem from "@theme/TabItem";
 
 # RAG with Vector Store
 
-**Retrieval-Augmented Generation (RAG)** is a powerful method that enhances language models with external knowledge. Instead of relying solely on the model’s internal training data, RAG retrieves relevant documents from a knowledge base—typically a vector store—and injects them into the prompt at inference time. This allows the model to generate more accurate, up-to-date, and context-aware responses.
+**Retrieval-Augmented Generation (RAG)** is a powerful method that enhances
+language models with external knowledge. Instead of relying solely on the
+model’s internal training data, RAG retrieves relevant documents from a
+knowledge base—typically a vector store—and injects them into the prompt at
+inference time. This allows the model to generate more accurate, up-to-date, and
+context-aware responses.
 
 RAG is particularly useful when:
 
-* The knowledge base is too large to fit within the model’s context window.
-* Real-time or domain-specific information is needed.
-* You want to combine static model knowledge with dynamic data sources.
+- The knowledge base is too large to fit within the model’s context window.
+- Real-time or domain-specific information is needed.
+- You want to combine static model knowledge with dynamic data sources.
 
 ### Initializing a Vector Store
 
-Ailoy simplifies the construction of RAG pipelines through its built-in `VectorStore` component, which works alongside the `Agent`.
+Ailoy simplifies the construction of RAG pipelines through its built-in
+`VectorStore` component, which works alongside the `Agent`.
 
 To initialize a vector store:
 
 <CodeTabs>
-<CodeTabs.Python>
-```python
+<TabItem {...pythonTab}>
+
+```python showLineNumbers
 from ailoy import Runtime
 from ailoy.vectorstore import VectorStore, FAISSConfig
 
-rt = Runtime()
-with VectorStore(rt, FAISSConfig(embedding="bge-m3")) as vs:
+rt = Runtime() with VectorStore(rt, FAISSConfig(embedding="bge-m3")) as vs:
     ...
 ```
-</CodeTabs.Python>
-<CodeTabs.Nodejs>
-```typescript
+
+</TabItem>
+<TabItem {...nodeTab}>
+
+```typescript showLineNumbers
 import { createRuntime, VectorStore } from "ailoy-node";
 
 const rt = await createRuntime();
@@ -40,30 +47,37 @@ const vs = new VectorStore(rt, {
 });
 await vs.initialize();
 ```
-</CodeTabs.Nodejs>
+
+</TabItem>
 </CodeTabs>
 
-> Ailoy currently supports both [**FAISS**](https://github.com/facebookresearch/faiss) and [**ChromaDB**](https://www.trychroma.com/) as vector store backends.
-> Refer to the official configuration guide for backend-specific options.
+> Ailoy currently supports both
+> [**FAISS**](https://github.com/facebookresearch/faiss) and
+> [**ChromaDB**](https://www.trychroma.com/) as vector store backends. Refer to
+> the official configuration guide for backend-specific options.
 
-> 💡 **Note:** At this time, the only supported embedding model is [`bge-m3`](https://huggingface.co/BAAI/bge-m3).
-> Additional embedding models will be supported in future releases.
+> 💡 **Note:** At this time, the only supported embedding model is
+> [`bge-m3`](https://huggingface.co/BAAI/bge-m3). Additional embedding models
+> will be supported in future releases.
 
 ### Inserting Documents into the Vector Store
 
 You can insert text along with optional metadata into the vector store:
 
 <CodeTabs>
-<CodeTabs.Python>
-```python
+<TabItem {...pythonTab}>
+
+```python showLineNumbers
 vs.insert(
-    "Ailoy is a lightweight library for building AI applications", 
+    "Ailoy is a lightweight library for building AI applications",
     metadata={"topic": "Ailoy"}
 )
 ```
-</CodeTabs.Python>
-<CodeTabs.Nodejs>
-```typescript
+
+</TabItem>
+<TabItem {...nodeTab}>
+
+```typescript showLineNumbers
 await vs.insert({
   document: "Ailoy is a lightweight library for building AI applications",
   metadata: {
@@ -71,92 +85,117 @@ await vs.insert({
   },
 });
 ```
-</CodeTabs.Nodejs>
+
+</TabItem>
 </CodeTabs>
 
-In practice, you should split large documents into smaller chunks before inserting them. This improves retrieval quality. You may use any text-splitting tool (e.g., [LangChain](https://python.langchain.com/docs/concepts/text_splitters/)), or utilize Ailoy’s low-level runtime API for text splitting. (See [Calling Low-Level APIs](./calling-low-level-apis.md) for more details.)
+In practice, you should split large documents into smaller chunks before
+inserting them. This improves retrieval quality. You may use any text-splitting
+tool (e.g.,
+[LangChain](https://python.langchain.com/docs/concepts/text_splitters/)), or
+utilize Ailoy’s low-level runtime API for text splitting. (See
+[Calling Low-Level APIs](./calling-low-level-apis.md) for more details.)
 
 ### Retrieving Relevant Documents
 
 To retrieve documents similar to a given query:
 
 <CodeTabs>
-<CodeTabs.Python>
-```python
+<TabItem {...pythonTab}>
+
+```python showLineNumbers
 query = "What is Ailoy?"
-items = vs.retrieve(query, top_k=5)
+items =vs.retrieve(query, top_k=5)
 ```
-</CodeTabs.Python>
-<CodeTabs.Nodejs>
-```typescript
+
+</TabItem>
+<TabItem {...nodeTab}>
+
+```typescript showLineNumbers
 const query = "What is Ailoy?";
 const items = await vs.retrieve(query, 5);
 ```
-</CodeTabs.Nodejs>
+
+</TabItem>
 </CodeTabs>
 
-This returns a list of `VectorStoreRetrieveItem` instances representing the most relevant chunks, ranked by similarity. The number of results is controlled via the `top_k` parameter (default is 5).
+This returns a list of `VectorStoreRetrieveItem` instances representing the most
+relevant chunks, ranked by similarity. The number of results is controlled via
+the `top_k` parameter (default is 5).
 
 ### Constructing an Augmented Prompt
 
-Once documents are retrieved, you can construct a context-enriched prompt as follows:
+Once documents are retrieved, you can construct a context-enriched prompt as
+follows:
 
 <CodeTabs>
-<CodeTabs.Python>
-```python
+<TabItem {...pythonTab}>
+
+```python showLineNumbers
 prompt = f"""
     Based on the provided contexts, try to answer user's question.
     Context: {[item.document for item in items]}
     Question: {query}
 """
 ```
-</CodeTabs.Python>
-<CodeTabs.Nodejs>
-```typescript
+
+</TabItem>
+<TabItem {...nodeTab}>
+
+```typescript showLineNumbers
 const prompt = `
   Based on the provided contexts, try to answer user' question.
   Context: ${items.map((item) => item.document)}
   Question: ${query}
 `;
 ```
-</CodeTabs.Nodejs>
+
+</TabItem>
 </CodeTabs>
 
 You can then pass this prompt to the agent for inference:
 
 <CodeTabs>
-<CodeTabs.Python>
-```python
+<TabItem {...pythonTab}>
+
+```python showLineNumbers
 for resp in agent.run(prompt):
     print(resp.content, end='')
 print()
 ```
-</CodeTabs.Python>
-<CodeTabs.Nodejs>
-```typescript
+
+</TabItem>
+<TabItem {...nodeTab}>
+
+```typescript showLineNumbers
 for await (const resp of agent.run(prompt)) {
-    process.stdout.write(resp.content);
+  process.stdout.write(resp.content);
 }
 process.stdout.write("\n");
 ```
-</CodeTabs.Nodejs>
+
+</TabItem>
 </CodeTabs>
 
 ### Complete Example
 
 <CodeTabs>
-<CodeTabs.Python>
-```python
+<TabItem {...pythonTab}>
+
+```python showLineNumbers
 from ailoy import Runtime
 from ailoy.vectorstore import VectorStore, FAISSConfig
 
 # Initialize Runtime
+
 rt = Runtime()
+
 # Initialize Agent and VectorStore
+
 with Agent(rt, model_name="qwen3-8b") as agent, VectorStore(rt, FAISSConfig(embedding="bge-m3")) as vs:
     # Insert items
     vs.insert(
-        "Ailoy is a lightweight library for building AI applications", 
+        "Ailoy is a lightweight library for building AI applications",
         metadata={"topic": "Ailoy"}
     )
 
@@ -175,21 +214,20 @@ with Agent(rt, model_name="qwen3-8b") as agent, VectorStore(rt, FAISSConfig(embe
     for resp in agent.run(prompt):
         print(resp.content, end='')
     print()
+
 ```
-</CodeTabs.Python>
-<CodeTabs.Nodejs>
-```typescript
+
+</TabItem>
+<TabItem {...nodeTab}>
+
+```typescript showLineNumbers
 import { createRuntime, createAgent, createVectorStore } from "ailoy-node";
 
 async function main() {
   // Initialize Runtime
   const rt = await createRuntime();
   // Initialize Agent
-  const agent = await createAgent(rt, {
-    model: {
-      name: "qwen3-8b",
-    },
-  });
+  const agent = await createAgent(rt, { model: { name: "qwen3-8b" } });
   // Initialize VectorStore
   const vs = await createVectorStore(rt, {
     type: "faiss",
@@ -199,9 +237,7 @@ async function main() {
   // Insert items
   await vs.insert({
     document: "Ailoy is a lightweight library for building AI applications",
-    metadata: {
-        topic: "Ailoy",
-    },
+    metadata: { topic: "Ailoy" },
   });
 
   // Search the most relevant items
@@ -210,9 +246,9 @@ async function main() {
 
   // Augment user query
   const prompt = `
-    Based on the provided contexts, try to answer user' question.
-    Context: ${items.map((item) => item.document)}
-    Question: ${query}
+      Based on the provided contexts, try to answer user' question.
+      Context: ${items.map((item) => item.document)}
+      Question: ${query}
   `;
 
   // Invoke agent
@@ -222,7 +258,9 @@ async function main() {
   process.stdout.write("\n");
 }
 ```
-</CodeTabs.Nodejs>
+
+</TabItem>
 </CodeTabs>
 
-> **Tip:** For best results, ensure your documents are chunked semantically (e.g., by paragraphs or sections).
+> **Tip:** For best results, ensure your documents are chunked semantically
+> (e.g., by paragraphs or sections).

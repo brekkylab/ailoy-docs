@@ -1,4 +1,4 @@
-import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -15,19 +15,19 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   documentSidebar: [
     {
-      type: 'category',
-      label: 'Tutorial',
+      type: "category",
+      label: "Tutorial",
       items: [
-        'tutorial/getting-started',
-        'tutorial/reasoning',
-        'tutorial/using-tools',
-        'tutorial/integrate-with-mcp',
-        'tutorial/calling-low-level-apis',
-        'tutorial/rag-with-vector-store',
+        "tutorial/getting-started",
+        "tutorial/reasoning",
+        "tutorial/using-tools",
+        "tutorial/integrate-with-mcp",
+        "tutorial/calling-low-level-apis",
+        "tutorial/rag-with-vector-store",
       ],
     },
-    'agent-response-format',
-    'tools',
+    "agent-response-format",
+    "tools",
   ],
 };
 
