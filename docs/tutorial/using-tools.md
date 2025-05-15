@@ -4,11 +4,12 @@ import ToolStructureSvg from './img/tool-structure.svg';
 
 # Using Tools
 
-One of the most powerful features in Ailoy is the **tool calling system**.
-It allows you to extend the capabilities of your LLM by connecting it to external APIs or tools.
-This way, your agent can access real-time or domain-specific information, even if it wasn’t part of the model’s original training data.
-You can attach an agent for a custom service you’ve built, like whether or location.
-You could also build financial decision-making app with real-time exchange rate or stock price.
+One of the most powerful features in Ailoy is the tool calling system.
+It allows you to extend the capabilities of your LLM by connecting it to external tools or APIs.
+This way, the agent can access real-time or domain-specific information, even if it wasn’t part of the model’s training data.
+For example, you can attach weather or location services to your agent.
+You could also build a financial decision-making app using real-time exchange rates or stock prices.
+Moreover, the agent can execute financial decisions itself with LLM, enabling powerful automation.
 
 ## How tool calling works
 
@@ -29,7 +30,7 @@ Let's take a quick look at how tool calling works in general. In most agent syst
 ## Building an Agent with Tool Support
 
 Now, let's see how to make an agent tool-aware in Ailoy.
-In this example, we’ll use the [Frankfurters API](https://frankfurter.dev/) to add real-time exchange rate lookup functionality.
+In this example, we’ll use the [Frankfurter API](https://frankfurter.dev/) to add real-time exchange rate lookup functionality.
 
 The first step is to define a tool.
 
@@ -195,7 +196,7 @@ for resp in agent.run(question):
     print(resp.content, end="")
 print()
 
-agent.deinitialize()
+agent.delete()
 
 rt.close()
 ```
@@ -219,7 +220,7 @@ import { startRuntime, createAgent } from "ailoy";
   }
   process.stdout.write("\n");
 
-  await agent.deinitialize();
+  await agent.delete();
 
   await rt.stop();
 })();
@@ -227,7 +228,7 @@ import { startRuntime, createAgent } from "ailoy";
 </TabItem>
 </Tabs>
 
-:::note
+:::warning
 Tools aren't free — every token counts.
 
 Calling external APIs or running local AI models consumes real resources.
