@@ -1,0 +1,75 @@
+import BrokerVMRuntimeImage from "./img/broker-vm-runtime.svg";
+
+# Architecture
+
+## Message Broker
+
+Ailoy aims to enable production-level LLM execution with minimal boilerplate across a wide range of programming languages and environments.
+To achieve this, Ailoy is structured around a modular, message-driven architecture composed of three core components: **Runtime**, **Broker**, and **VM**.
+It is architected with the aim of achieving flexibility, portability, and performance.
+
+<p align="center">
+  <BrokerVMRuntimeImage style={{ width: "80%", height: "80%" }} />
+</p>
+
+### Runtime
+
+The `Runtime` serves as the user-facing interface for a specific programming language.
+It defines the public API and manages all interactions between the user and the internal components of the system.
+
+#### Responsibilities
+
+- Expose user-facing APIs
+- Serialize user requests into messages
+- Deserialize responses back into native objects
+
+#### Implementations
+
+- Python
+- JavaScript (node.js)
+- *JavaScript (browser) (planned)*
+- *Java / Kotlin (planned)*
+- *C# (planned)*
+- etc.
+
+### Broker
+
+The `Broker` handles message delivery, routing, and protocol abstraction.
+It sits between the `Runtime` and the `VM`, managing communications and message dispatching.
+
+#### Responsibilities
+
+- Manage connections and message queues
+- Route messages to appropriate VMs
+- Support multiple networking backends
+
+#### Implementations
+
+- inproc (for intra-device protocol)
+- *tcp (for inter-device protocol) (planned)*
+
+### VM (Virtual Machine)
+
+The `VM` is the execution backend that performs the actual compute tasks.
+It is platform-specific and executes requests routed through the `Broker`.
+
+#### Responsibilities
+
+- Execute AI-related tasks or compute operations
+- Serialize response messages and return them to the `Broker`
+
+#### Target architectures
+
+Our goal is to run the `VM` across diverse environments.
+To support this, we are implementing portable `VM` backends across a variety of targets.
+
+- x86_64-windows-unknown
+- arm64-macos-unknown
+- x86_64-unknown-linux-gnu
+- *wasm32-emscripten-unknown (planned)*
+- to be added
+
+All communication with the `VM` is strictly mediated through the Broker.
+
+
+## Module system
