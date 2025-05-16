@@ -14,12 +14,13 @@ forwarding results back from the `VM` to the user.
 
 By using the `Runtime` directly, you can send requests to the `VM` yourself.
 This is useful when you need more advanced configuration or want to call APIs
-that are not available through the high-level Agent interface.
+that are not available through the high-level interfaces.
 
-Let’s take a look at how the lower-level API works using the `split_text`
+Let’s take a look at how the lower-level API works using the
+[`split_text`](../api-references/low-level-runtime-apis.mdx#-split_text-split_text_separators_recursively)
 operator, which transforms a long document into a set of smaller chunks. The
-`spit_text` operation is essential for tasks like Retrieval-Augmented Generation
-(RAG).
+[`spit_text`](../api-references/low-level-runtime-apis.mdx#-split_text-split_text_separators_recursively)
+operator is essential for tasks like Retrieval-Augmented Generation (RAG).
 
 For this example, we’ll use Lev Tolstoy’s
 [What Men Live by](https://www.gutenberg.org/files/6157/6157-h/6157-h.htm) as
@@ -109,4 +110,5 @@ He came closer, so that it was clearly visible. To his surprise it really was a 
 
 {/* prettier-ignore-end */}
 
-(TODO) See low-level API reference for details.
+See [Low-level Runtime APIs](../api-references/low-level-runtime-apis.mdx) for
+the full list of available APIs.
