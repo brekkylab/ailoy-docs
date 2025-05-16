@@ -1,4 +1,5 @@
 import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
+import TerminalBox from '@site/src/components/TerminalBox';
 import TabItem from "@theme/TabItem";
 
 # Getting started
@@ -8,7 +9,7 @@ The very first step to using Ailoy is to start a `Runtime`.
 <CodeTabs>
 <TabItem {...pythonTab}>
 
-```python
+```python showLineNumbers
 from ailoy import Runtime
 
 # The runtime must be started to use Ailoy
@@ -23,7 +24,7 @@ rt.stop()
 </TabItem>
 <TabItem {...nodeTab}>
 
-```typescript
+```typescript showLineNumbers
 import { startRuntime } from "ailoy-node";
 
 // The runtime must be started to use Ailoy
@@ -49,7 +50,7 @@ use the functionality of LLM effortlessly. In this example, we’ll use Alibaba'
 <CodeTabs>
 <TabItem {...pythonTab}>
 
-```python
+```python showLineNumbers
 from ailoy import Agent
 
 # Defines an agent.
@@ -65,7 +66,7 @@ agent.delete()
 </TabItem>
 <TabItem {...nodeTab}>
 
-```typescript
+```typescript showLineNumbers
 import { defineAgent } from "ailoy-node";
 
 // Defines an agent.
@@ -89,7 +90,7 @@ This can also be considered a single step in successive generation process.
 <CodeTabs>
 <TabItem {...pythonTab}>
 
-```python
+```python showLineNumbers
 # This is where the actual LLM call happens.
 for resp in agent.run("Please give me a short poem about AI"):
     print(resp.content, end='')
@@ -99,7 +100,7 @@ print()
 </TabItem>
 <TabItem {...nodeTab}>
 
-```typescript
+```typescript showLineNumbers
 // This is where the actual LLM call happens
 for await (const resp of agent.run("Please give me a short poem about AI")) {
   process.stdout.write(`${resp.content}`);
@@ -112,12 +113,12 @@ process.stdout.write("\n");
 
 Then, you may see an output similar to this.
 
-```
+<TerminalBox>
 In the heart of innovation, AI dreams take flight—
 With thoughts that spark and find their way to light.
 It learns and creates, no bound, no strain—
 A world of dreams, where dreams may be found.
-```
+</TerminalBox>
 
 {/* prettier-ignore-start */}
 
@@ -135,7 +136,7 @@ Putting it all together, the complete code looks like this:
 <CodeTabs>
 <TabItem {...pythonTab}>
 
-```python
+```python showLineNumbers
 from ailoy import Runtime, Agent
 
 # The runtime must be started to use Ailoy
@@ -160,7 +161,7 @@ rt.stop()
 </TabItem>
 <TabItem {...nodeTab}>
 
-```typescript
+```typescript showLineNumbers
 import { startRuntime, defineAgent } from "ailoy-node";
 
 (async () => {

@@ -1,3 +1,7 @@
+import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
+import TerminalBox from '@site/src/components/TerminalBox';
+import TabItem from "@theme/TabItem";
+
 import AiloyInternalSvg from "./img/ailoy-internal.svg";
 
 # Calling low-level APIs
@@ -23,7 +27,10 @@ For this example, we’ll use Lev Tolstoy’s
 [What Men Live by](https://www.gutenberg.org/files/6157/6157-h/6157-h.htm) as
 the reference text.
 
-```python
+<CodeTabs>
+<TabItem {...pythonTab}>
+
+```python showLineNumber
 from ailoy import Runtime
 
 rt = Runtime()
@@ -39,15 +46,68 @@ print(len(chunks))  # == 12
 # Print chunks
 print("********************** First chunk **********************")
 print(chunks[0])
-print()
-print("********************** Second chunk *********************")
-print()
-print(chunks[1])
 print("*********************************************************")
 
 rt.stop()
 ```
+</TabItem>
+<TabItem {...nodeTab}>
 
-TODO(console output)
+```typescript showLineNumbers
+import { readFile } from "fs/promises";
 
-TODO See low-level API reference for details.
+import { startRuntime } from "ailoy-node";
+
+(async () => {
+  const rt = await startRuntime();
+
+  const text = await readFile("what_men_live_by.txt", "utf-8");
+
+  const result = await rt.call("split_text", { text });
+  const chunks = result.chunks;
+
+  console.log(chunks.length); // == 12
+
+  // Print chunks
+  console.log("********************** First chunk **********************");
+  console.log(chunks[0]);
+  console.log("*********************************************************");
+
+  rt.stop();
+})();
+```
+
+</TabItem>
+</CodeTabs>
+
+<TerminalBox>
+{`
+12
+********************** First chunk **********************
+WHAT MEN LIVE BY
+A shoemaker named Simon, who had neither house nor land of his own, lived with his wife and children in a peasant’s hut, and earned his living by his work. Work was cheap, but bread was dear, and what he earned he spent for food. The man and his wife had but one sheepskin coat between them for winter wear, and even that was torn to tatters, and this was the second year he had been wanting to buy sheep-skins for a new coat. Before winter Simon saved up a little money: a three-rouble note lay hidden in his wife’s box, and five roubles and twenty kopeks were owed him by customers in the village.
+
+So one morning he prepared to go to the village to buy the sheep-skins. He put on over his shirt his wife’s wadded nankeen jacket, and over that he put his own cloth coat. He took the three-rouble note in his pocket, cut himself a stick to serve as a staff, and started off after breakfast. “I’ll collect the five roubles that are due to me,” thought he, “add the three I have got, and that will be enough to buy sheep-skins for the winter coat.”
+
+He came to the village and called at a peasant’s hut, but the man was not at home. The peasant’s wife promised that the money should be paid next week, but she would not pay it herself. Then Simon called on another peasant, but this one swore he had no money, and would only pay twenty kopeks which he owed for a pair of boots Simon had mended. Simon then tried to buy the sheep-skins on credit, but the dealer would not trust him.
+
+“Bring your money,” said he, “then you may have your pick of the skins. We know what debt-collecting is like.” So all the business the shoemaker did was to get the twenty kopeks for boots he had mended, and to take a pair of felt boots a peasant gave him to sole with leather.
+
+Simon felt downhearted. He spent the twenty kopeks on vodka, and started homewards without having bought any skins. In the morning he had felt the frost; but now, after drinking the vodka, he felt warm, even without a sheep-skin coat. He trudged along, striking his stick on the frozen earth with one hand, swinging the felt boots with the other, and talking to himself.
+
+
+
+
+
+
+I
+“I’m quite warm,” said he, “though I have no sheep-skin coat. I’ve had a drop, and it runs through all my veins. I need no sheep-skins. I go along and don’t worry about anything. That’s the sort of man I am! What do I care? I can live without sheep-skins. I don’t need them. My wife will fret, to be sure. And, true enough, it is a shame; one works all day long, and then does not get paid. Stop a bit! If you don’t bring that money along, sure enough I’ll skin you, blessed if I don’t. How’s that? He pays twenty kopeks at a time! What can I do with twenty kopeks? Drink it-that’s all one can do! Hard up, he says he is! So he may be—but what about me? You have a house, and cattle, and everything; I’ve only what I stand up in! You have corn of your own growing; I have to buy every grain. Do what I will, I must spend three roubles every week for bread alone. I come home and find the bread all used up, and I have to fork out another rouble and a half. So just pay up what you owe, and no nonsense about it!”
+
+By this time he had nearly reached the shrine at the bend of the road. Looking up, he saw something whitish behind the shrine. The daylight was fading, and the shoemaker peered at the thing without being able to make out what it was. “There was no white stone here before. Can it be an ox? It’s not like an ox. It has a head like a man, but it’s too white; and what could a man be doing there?”
+
+He came closer, so that it was clearly visible. To his surprise it really was a man, alive or dead, sitting naked, leaning motionless against the shrine. Terror seized the shoemaker, and he thought, “Some one has killed him, stripped him, and left him there. If I meddle I shall surely get into trouble.”
+*********************************************************
+`}
+</TerminalBox>
+
+(TODO) See low-level API reference for details.
