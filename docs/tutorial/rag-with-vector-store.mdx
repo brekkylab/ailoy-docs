@@ -1,6 +1,3 @@
-import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
-import TabItem from "@theme/TabItem";
-
 # RAG with Vector Store
 
 **Retrieval-Augmented Generation (RAG)** is a useful method when you want to use
@@ -21,9 +18,8 @@ Ailoy simplifies the construction of RAG pipelines through its built-in
 To initialize a vector store:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 from ailoy import Runtime
 from ailoy.vectorstore import VectorStore
 
@@ -32,17 +28,13 @@ with VectorStore(rt, "bge-m3", "faiss") as vs:
     ...
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 import { startRuntime, defineVectorStore } from "ailoy-node";
 
 const rt = await startRuntime();
 const vs = await defineVectorStore(rt, "bge-m3", "faiss");
 ```
 
-</TabItem>
 </CodeTabs>
 
 > Ailoy currently supports both
@@ -59,19 +51,15 @@ const vs = await defineVectorStore(rt, "bge-m3", "faiss");
 You can insert text along with optional metadata into the vector store:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 vs.insert(
     "Ailoy is a lightweight library for building AI applications",
     metadata={"topic": "Ailoy"}
 )
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 await vs.insert({
   document: "Ailoy is a lightweight library for building AI applications",
   metadata: {
@@ -80,7 +68,6 @@ await vs.insert({
 });
 ```
 
-</TabItem>
 </CodeTabs>
 
 In practice, you should split large documents into smaller chunks before
@@ -88,29 +75,24 @@ inserting them. This improves retrieval quality. You may use any text-splitting
 tool (e.g.,
 [LangChain](https://python.langchain.com/docs/concepts/text_splitters/)), or
 utilize Ailoy’s low-level runtime API for text splitting. (See
-[Calling Low-Level APIs](./calling-low-level-apis.md) for more details.)
+[Calling Low-Level APIs](./calling-low-level-apis.mdx) for more details.)
 
 ### Retrieving Relevant Documents
 
 To retrieve documents similar to a given query:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 query = "What is Ailoy?"
-items =vs.retrieve(query, top_k=5)
+items = vs.retrieve(query, top_k=5)
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 const query = "What is Ailoy?";
 const items = await vs.retrieve(query, 5);
 ```
 
-</TabItem>
 </CodeTabs>
 
 This returns a list of `VectorStoreRetrieveItem` instances representing the most
@@ -123,9 +105,8 @@ Once documents are retrieved, you can construct a context-enriched prompt as
 follows:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 prompt = f"""
     Based on the provided contexts, try to answer user's question.
     Context: {[item.document for item in items]}
@@ -133,10 +114,7 @@ prompt = f"""
 """
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 const prompt = `
   Based on the provided contexts, try to answer user' question.
   Context: ${items.map((item) => item.document)}
@@ -144,39 +122,32 @@ const prompt = `
 `;
 ```
 
-</TabItem>
 </CodeTabs>
 
 You can then pass this prompt to the agent for inference:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 for resp in agent.run(prompt):
     print(resp.content, end='')
 print()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 for await (const resp of agent.run(prompt)) {
   process.stdout.write(resp.content);
 }
 process.stdout.write("\n");
 ```
 
-</TabItem>
 </CodeTabs>
 
 ### Complete Example
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 from ailoy import Runtime, Agent, VectorStore
 
 # Initialize Runtime
@@ -194,7 +165,7 @@ with Agent(rt, "qwen3-8b") as agent, VectorStore(rt, "bge-m3", "faiss") as vs:
 
     # Search the most relevant items
     query = "What is Ailoy?"
-    items = vs.retrieve(query)
+    items = vs.retrieve(query, top_k=5)
 
     # Augment user query
     prompt = f"""
@@ -210,10 +181,7 @@ with Agent(rt, "qwen3-8b") as agent, VectorStore(rt, "bge-m3", "faiss") as vs:
 
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 import { createRuntime, defineAgent, defineVectorStore } from "ailoy-node";
 
 async function main() {
@@ -249,7 +217,6 @@ async function main() {
 }
 ```
 
-</TabItem>
 </CodeTabs>
 
 {/* prettier-ignore-start */}

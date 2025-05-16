@@ -1,7 +1,3 @@
-import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
-import TabItem from "@theme/TabItem";
-import TerminalBox from '@site/src/components/TerminalBox';
-
 import ToolStructureSvg from "./img/tool-structure.svg";
 
 # Using tools
@@ -20,7 +16,9 @@ automation.
 Let's take a quick look at how tool calling works in general. In most agent
 system, tool calling can be achieved by the following process.
 
-<ToolStructureSvg style={{ width: "40%", height: "40%" }} />
+<p align="center">
+  <ToolStructureSvg style={{ width: "40%", height: "40%" }} />
+</p>
 
 - (1) \[Tool Description\] Assistant (or LLM) can recognize a tool based on its
   description (at it’s initialization).
@@ -40,46 +38,42 @@ rate lookup functionality.
 The first step is to define a tool.
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 rt = Runtime()
 agent = Agent(rt, model_name="qwen3-8b")
 
 frankfurter = {
-  "type": "restapi",
-  "description": {
-    "name": "frankfurter",
-    "description": "Get the latest currency exchange rates of target currencies based on the 'base' currency",
-    "parameters": {
-        "type": "object",
-        "properties": {
-            "base": {
-                "type": "string",
-                "description": "The ISO 4217 currency code to be the divider of the currency rate to be got."
+    "type": "restapi",
+    "description": {
+        "name": "frankfurter",
+        "description": "Get the latest currency exchange rates of target currencies based on the 'base' currency",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "base": {
+                    "type": "string",
+                    "description": "The ISO 4217 currency code to be the divider of the currency rate to be got."
+                },
+                "symbols": {
+                    "type": "string",
+                    "description": "The target ISO 4217 currency codes separated by comma."
+                }
             },
-            "symbols": {
-                "type": "string",
-                "description": "The target ISO 4217 currency codes separated by comma."
-            }
-        },
-    }
-  },
-  "behavior": {
-    "baseURL": "https://api.frankfurter.dev/v1/latest",
-    "method": "GET",
-    "headers": {
-      "accept": "application/json"
-    }
-  },
+        }
+    },
+    "behavior": {
+        "baseURL": "https://api.frankfurter.dev/v1/latest",
+        "method": "GET",
+        "headers": {
+            "accept": "application/json"
+        }
+    },
 }
 agent.add_restapi_tool(frankfurter)
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 const rt = await startRuntime();
 const agent = await defineAgent(rt, { model: { name: "qwen3-8b" } });
 
@@ -112,10 +106,9 @@ const frankfurter = {
     },
   },
 };
-agent.add_restapi_tool(frankfurter);
+agent.addRESTAPITool(frankfurter);
 ```
 
-</TabItem>
 </CodeTabs>
 
 The `description` defines how the AI recognizes and understands the tool. In
@@ -138,47 +131,37 @@ tools, including the Frankfurter API.
 If you find a proper tool from preset, you can simply imports it into the agent:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
 ```python
 agent.add_tools_from_preset("frankfurter")
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
 ```typescript
 agent.addToolsFromPreset("frankfurter");
 ```
 
-</TabItem>
 </CodeTabs>
 
 By calling `run` function, you can see that the agent uses the Frankfurters API
 to incorporate real-time exchange rate information into its response.
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 question = "I want to buy 250 U.S. Dollar and 350 Chinese Yuan with my Korean Won. How much do I need to take?"
-async for resp in agent.run(question):
+for resp in agent.run(question):
     print(resp.content, end='')
 print()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 const question = "I want to buy 250 U.S. Dollar and 350 Chinese Yuan with my Korean Won. How much do I need to take?";
 for await (const resp in agent.run(question)) {
-    process.stdout.write(resp.content);
+  process.stdout.write(resp.content);
 }
 process.stdout.write("\n");
 ```
 
-</TabItem>
 </CodeTabs>
 
 Here's what the output will look like:
@@ -191,25 +174,34 @@ id='call_fe4b76ff-021c-409b-a835-df83b425f35e' type='function' function=ToolCall
 - **1 CNY = 0.00516 KRW**
 
 ### Step 1: Calculate KRW for USD
-$$ 250 \, \text{USD} \times \frac{1}{0.00072} = 250 \, \text{USD} \times 1388.89 \approx 347,222 \, \text{KRW} $$
+
+$$
+250 \, \text{USD} \times \frac{1}{0.00072} = 250 \, \text{USD} \times 1388.89
+\approx 347,222 \, \text{KRW}
+$$
 
 ### Step 2: Calculate KRW for CNY
-$$ 350 \, \text{CNY} \times \frac{1}{0.00516} = 350 \, \text{CNY} \times 193.88 \approx 67,858 \, \text{KRW} $$
+
+$$
+350 \, \text{CNY} \times \frac{1}{0.00516} = 350 \, \text{CNY} \times 193.88
+\approx 67,858 \, \text{KRW}
+$$
 
 ### Step 3: Add both amounts
+
 $$ 347,222 \, \text{KRW} + 67,858 \, \text{KRW} = 415,080 \, \text{KRW} $$
 
 ### Final Answer:
-You need approximately **415,080 Korean Won** to buy 250 USD and 350 CNY.
-`}
+
+You need approximately **415,080 Korean Won** to buy 250 USD and 350 CNY. `}
+
 </TerminalBox>
 
 ## Complete Example
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 from ailoy import Runtime, Agent
 
 rt = Runtime()
@@ -229,10 +221,7 @@ agent.delete()
 rt.stop()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 import { startRuntime, defineAgent } from "ailoy-node";
 
 (async () => {
@@ -256,7 +245,6 @@ import { startRuntime, defineAgent } from "ailoy-node";
 })();
 ```
 
-</TabItem>
 </CodeTabs>
 
 {/* prettier-ignore-start */}

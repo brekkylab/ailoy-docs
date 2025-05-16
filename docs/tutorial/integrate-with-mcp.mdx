@@ -1,6 +1,3 @@
-import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
-import TabItem from "@theme/TabItem";
-
 # Integrate with MCP
 
 The **Model Context Protocol (MCP)** is an open protocol developed by Anthropic
@@ -16,9 +13,8 @@ Ailoy Agents can seamlessly integrate with existing MCP-compliant servers. For
 example, the following code connects to the official GitHub MCP server:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 from mcp import StdioServerParameters
 
 agent.add_tools_from_mcp_server(
@@ -29,17 +25,13 @@ agent.add_tools_from_mcp_server(
 )
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 await agent.addToolsFromMcpServer({
   command: "npx",
   args: ["-y", "@modelcontextprotocol/server-github"],
 });
 ```
 
-</TabItem>
 </CodeTabs>
 
 This launches the GitHub MCP server as a subprocess using standard I/O for
@@ -52,19 +44,15 @@ Once the tools are registered, the agent can invoke them naturally through its
 `query()` method:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 question = "Search the repository named brekkylab/ailoy and describe what it does based on its README.md."
 for resp in agent.query(question):
     print(resp.content, end='')
 print()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 const question =
   "Search the repository named brekkylab/ailoy and describe what it does based on its README.md.";
 for await (const resp of agent.query(question)) {
@@ -73,7 +61,6 @@ for await (const resp of agent.query(question)) {
 process.stdout.write("\n");
 ```
 
-</TabItem>
 </CodeTabs>
 
 This demonstrates how the agent utilizes the GitHub MCP tools to search
@@ -87,9 +74,8 @@ Here is the full source code to set up an agent, connect it to the GitHub MCP
 server, and issue a query:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 from ailoy import Runtime, Agent
 from mcp import StdioServerParameters
 
@@ -109,10 +95,7 @@ with Agent(rt, model_name="qwen3-8b") as agent:
     print()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 import { startRuntime, createAgent } from "ailoy-node";
 
 (async () => {
@@ -134,7 +117,6 @@ import { startRuntime, createAgent } from "ailoy-node";
 })();
 ```
 
-</TabItem>
 </CodeTabs>
 
 {/* prettier-ignore-start */}

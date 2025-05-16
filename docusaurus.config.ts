@@ -2,6 +2,8 @@ import type * as Preset from "@docusaurus/preset-classic";
 import type { Config } from "@docusaurus/types";
 import { themes as prismThemes } from "prism-react-renderer";
 
+import remarkCodeTabs from "./src/plugins/remark-code-tabs";
+
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
@@ -37,6 +39,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: "./src/sidebars.ts",
+          remarkPlugins: [remarkCodeTabs],
         },
         // blog: {
         //   showReadingTime: true,
