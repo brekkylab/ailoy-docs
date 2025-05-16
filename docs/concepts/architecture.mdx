@@ -48,7 +48,7 @@ It sits between the `Runtime` and the `VM`, managing communications and message 
 - inproc (for intra-device protocol)
 - *tcp (for inter-device protocol) (planned)*
 
-### VM (Virtual Machine)
+### VM
 
 The `VM` is the execution backend that performs the actual compute tasks.
 It is platform-specific and executes requests routed through the `Broker`.
@@ -71,5 +71,30 @@ To support this, we are implementing portable `VM` backends across a variety of 
 
 All communication with the `VM` is strictly mediated through the Broker.
 
-
 ## Module system
+
+In Ailoy's architecture, the VM is responsible for computing and returning results for given tasks.
+To support this functionality effectively, the VM is expected to meet the following requirements:
+
+1. It must be capable of executing a wide variety of functions, with the expectation that the number of supported functions will grow continuously.
+2. It should support user-defined tasks as plug-ins, enabling extensibility without requiring core modifications.
+
+To address these needs, Ailoy adopts a module-based VM system.
+This system allows the VM to dynamically load task-specific modules and invoke functions defined within them.
+Conceptually, a module can be thought of as a package, as commonly seen in many programming languages.
+
+- VM: The actual runtime environment where task execution takes place
+- Module: The executable logic that defines how tasks are performed within the VM
+
+Each module in Ailoy consists of two types of sub-entities:
+
+- Operator: A stateless function. When invoked with input, it executes immediately and returns a result.
+- Component: A stateful instance. When invoked, it produces an output based on both its internal state and the given input.
+
+Roughly speaking, operators are analogous to *functions*, while components resemble *class instances* in computer programming.
+
+### Operator
+
+### Component & ComponentType
+
+### Module
