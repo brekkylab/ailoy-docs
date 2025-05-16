@@ -31,10 +31,10 @@ const sidebars: SidebarsConfig = {
       label: "Concepts",
       items: [
         "concepts/architecture",
+        "concepts/agent-response-format",
+        "concepts/tools",
       ],
     },
-    "agent-response-format",
-    "tools",
   ],
 };
 
