@@ -1,0 +1,476 @@
+# Low-level Runtime APIs
+
+## Primitive Value Types
+
+| Name    | Python          | Javascript          |
+| ------- | --------------- | ------------------- |
+| null    | `None`          | `undefined`, `null` |
+| bool    | `bool`          | `boolean`           |
+| uint    | `int`           | `number`            |
+| int     | `int`           | `number`            |
+| float   | `float`         | `number`            |
+| double  | `float`         | `number`            |
+| string  | `str`           | `string`            |
+| array   | `List`          | `Array`             |
+| map     | `Dict`          | `object`            |
+| ndarray | `numpy.ndarray` | `TypedArray`        |
+
+## Component Types
+
+### ⚡ Instant operators / methods
+
+### ⏩ Iterative operators / methods
+
+### 📦 Components
+
+---
+
+## `default` module
+
+### ⚡ `echo`
+
+**Parameters**
+
+| Name   | Type   | Description  | Required |
+| ------ | ------ | ------------ | -------- |
+| `text` | string | text to echo | ✅       |
+
+**Outputs**
+
+| Name   | Type   | Description |
+| ------ | ------ | ----------- |
+| `text` | string | text echoed |
+
+### ⏩ `spell`
+
+**Parameters**
+
+| Name   | Type   | Description   | Required |
+| ------ | ------ | ------------- | -------- |
+| `text` | string | text to spell | ✅       |
+
+**Outputs**
+
+| Name   | Type   | Description  |
+| ------ | ------ | ------------ |
+| `text` | string | text spelled |
+
+### ⚡ `http_request`
+
+**Parameters**
+
+| Name      | Type   | Description                                         | Required |
+| --------- | ------ | --------------------------------------------------- | -------- |
+| `url`     | string | base url to request                                 | ✅       |
+| `method`  | string | request method among `GET`, `POST`, `PUT`, `DELETE` | ✅       |
+| `headers` | map    | request headers                                     |          |
+| `body`    | string | request body                                        |          |
+
+**Outputs**
+
+| Name          | Type  | Description      |
+| ------------- | ----- | ---------------- |
+| `status_code` | uint  | HTTP status code |
+| `headers`     | map   | response headers |
+| `body`        | bytes | response body    |
+
+### ⚡ `calculator`
+
+**Parameters**
+
+| Name         | Type   | Description                 | Required |
+| ------------ | ------ | --------------------------- | -------- |
+| `expression` | string | expression to be calculated | ✅       |
+
+**Outputs**
+
+| Name    | Type   | Description        |
+| ------- | ------ | ------------------ |
+| `value` | double | calculation result |
+
+### 📦 `accumulator`
+
+**Parameters**
+
+| Name   | Type   | Description | Required |
+| ------ | ------ | ----------- | -------- |
+| `base` | string | base string | ✅       |
+
+**Methods**
+
+- #### ⚡ `get`
+
+  **Parameters**
+
+  None
+
+  **Outputs**
+
+  | Name   | Type   | Description          |
+  | ------ | ------ | -------------------- |
+  | `text` | string | current string value |
+
+- #### ⚡ `put`
+
+  **Parameters**
+
+  | Name | Type   | Description      | Required |
+  | ---- | ------ | ---------------- | -------- |
+  | `s`  | string | string to append | ✅       |
+
+  **Outputs**
+
+  None
+
+- #### ⚡ `count`
+
+  **Parameters**
+
+  None
+
+  **Outputs**
+
+  | Name    | Type | Description                          |
+  | ------- | ---- | ------------------------------------ |
+  | `count` | uint | number of `put`s being called so far |
+
+---
+
+## `language` module
+
+### 📦 `tvm_embedding_model`
+
+**Parameters**
+
+| Name           | Type   | Description                                                                        | Required |
+| -------------- | ------ | ---------------------------------------------------------------------------------- | -------- |
+| `model`        | string | Model name to use.<br/>Available values: `BAAI/bge-m3` (defaults to `BAAI/bge-m3`) |          |
+| `quantization` | string | Quantization method.<br/>Available values: `q4f16_1` (defaults to `q4f16_1`)       |          |
+
+**Methods**
+
+- #### ⚡ `infer`
+
+  **Parameters**
+
+  | Name     | Type   | Description                     | Required |
+  | -------- | ------ | ------------------------------- | -------- |
+  | `prompt` | string | input text to perform embedding | ✅       |
+
+  **Outputs**
+
+  | Name        | Type    | Description                  |
+  | ----------- | ------- | ---------------------------- |
+  | `embedding` | ndarray | result embedding (1-d array) |
+
+- #### ⚡ `tokenize`
+
+  **Parameters**
+
+  | Name     | Type   | Description                        | Required |
+  | -------- | ------ | ---------------------------------- | -------- |
+  | `prompt` | string | input text to perform tokenization | ✅       |
+
+  **Outputs**
+
+  | Name     | Type         | Description   |
+  | -------- | ------------ | ------------- |
+  | `tokens` | array\<int\> | result tokens |
+
+### 📦 `tvm_language_model`
+
+**Parameters**
+
+| Name           | Type   | Description                                                                                                     | Required |
+| -------------- | ------ | --------------------------------------------------------------------------------------------------------------- | -------- |
+| `model`        | string | Model name to use.<br/>Available values: `Qwen/Qwen3-0.6B`, `Qwen/Qwen3-1.7B`, `Qwen/Qwen3-4B`, `Qwen/Qwen3-8B` | ✅       |
+| `quantization` | string | Quantization method.<br/>Available values: `q4f16_1` (defaults to `q4f16_1`)                                    |          |
+| `mode`         | string | Mode to initialize the model<br/>Available values: `interactive`, `local`, `server` (defaults to `interactive`) |          |
+
+**Methods**
+
+- #### ⚡ `apply_chat_template`
+
+  **Parameters**
+
+  | Name               | Type                   | Description                                  | Required |
+  | ------------------ | ---------------------- | -------------------------------------------- | -------- |
+  | `messages`         | array\<map\>           | array of messages (OpenAI API compatible)    | ✅       |
+  | `tools`            | array\<map\> or string | tools to be used (defaults to empty string)  |          |
+  | `enable_reasoning` | bool                   | flag to enable reasoning (defaults to false) |          |
+
+  **Outputs**
+
+  | Name     | Type   | Description   |
+  | -------- | ------ | ------------- |
+  | `prompt` | string | result prompt |
+
+- #### ⏩ `infer`
+
+  **Parameters**
+
+  | Name                        | Type                   | Description                                                | Required |
+  | --------------------------- | ---------------------- | ---------------------------------------------------------- | -------- |
+  | `messages`                  | array\<map\>           | array of messages (OpenAI API compatible)                  | ✅       |
+  | `tools`                     | array\<map\> or string | tools to be used (defaults to empty string)                |          |
+  | `enable_reasoning`          | bool                   | flag to enable reasoning (defaults to false)               |          |
+  | `ignore_reasoning_messages` | bool                   | ignore reasoning messages from outputs (defaults to false) |          |
+
+  **Outputs**
+
+  | Name            | Type           | Description                                                                   |
+  | --------------- | -------------- | ----------------------------------------------------------------------------- |
+  | `message`       | map            | result message from this iteration                                            |
+  | `finish_reason` | string or null | finished reason.<br/>Available values: `stop`, `tool_call`, `length`, `error` |
+
+### 📦 `openai`
+
+**Parameters**
+
+| Name      | Type   | Description                                                      | Required |
+| --------- | ------ | ---------------------------------------------------------------- | -------- |
+| `api_key` | string | API key to use on inference                                      | ✅       |
+| `model`   | string | Model name<br/>Available values: `gpt-4o` (defaults to `gpt-4o`) |          |
+
+**Methods**
+
+- #### ⚡ `infer`
+
+  **Parameters**
+
+  | Name       | Type         | Description                                 | Required |
+  | ---------- | ------------ | ------------------------------------------- | -------- |
+  | `messages` | array\<map\> | array of messages (OpenAI API compatible)   | ✅       |
+  | `tools`    | array\<map\> | tools to be used (defaults to empty string) |          |
+
+  **Outputs**
+
+  | Name            | Type   | Description                                                                   |
+  | --------------- | ------ | ----------------------------------------------------------------------------- |
+  | `message`       | map    | result message                                                                |
+  | `finish_reason` | string | finished reason.<br/>Available values: `stop`, `tool_call`, `length`, `error` |
+
+### 📦 `faiss_vector_store`
+
+**Parameters**
+
+| Name        | Type | Description            | Required |
+| ----------- | ---- | ---------------------- | -------- |
+| `dimension` | uint | Dimension of the index | ✅       |
+
+**Methods**
+
+- #### ⚡ `insert`<a name="faiss_vector_store.insert"></a>
+
+  **Parameters**
+
+  | Name        | Type        | Description                                                         | Required |
+  | ----------- | ----------- | ------------------------------------------------------------------- | -------- |
+  | `embedding` | ndarray     | embedding to insert                                                 | ✅       |
+  | `document`  | string      | original document corresponding to embedding                        | ✅       |
+  | `metadata`  | map or null | arbitrary key-value pairs with JSON-serializable (defaults to null) |          |
+
+  **Outputs**
+
+  | Name | Type   | Description                         |
+  | ---- | ------ | ----------------------------------- |
+  | `id` | string | Unique identifier of the added item |
+
+- #### ⚡ `insert_many`
+
+  **Parameters**
+
+  | Name    | Type         | Description                                                         | Required |
+  | ------- | ------------ | ------------------------------------------------------------------- | -------- |
+  | `items` | array\<map\> | array of objects with [`insert`](#faiss_vector_store.insert) inputs | ✅       |
+
+  **Outputs**
+
+  | Name  | Type            | Description                                                     |
+  | ----- | --------------- | --------------------------------------------------------------- |
+  | `ids` | array\<string\> | Unique identifiers of the added items (same order with `items`) |
+
+- #### ⚡ `get_by_id`
+
+  **Parameters**
+
+  | Name | Type   | Description                       | Required |
+  | ---- | ------ | --------------------------------- | -------- |
+  | `id` | string | Unique identifier of item to find | ✅       |
+
+  **Outputs**
+
+  | Name        | Type    | Description                         |
+  | ----------- | ------- | ----------------------------------- |
+  | `id`        | string  | Unique identifier of the found item |
+  | `embedding` | ndarray | Embedding of the found item         |
+  | `document`  | string  | Document of the found item          |
+  | `metadata`  | map     | Metadata of the found item          |
+
+- #### ⚡ `retrieve`
+
+  **Parameters**
+
+  | Name              | Type   | Description                           | Required |
+  | ----------------- | ------ | ------------------------------------- | -------- |
+  | `query_embedding` | string | Embedding for query message           | ✅       |
+  | `top_k`           | uint   | Number of results to retrieve at most | ✅       |
+
+  **Outputs**
+
+  | Name      | Type         | Description                                                                                                                                                                                                                                                     |
+  | --------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `results` | array\<map\> | Retrieved results where each item consists of<br/>`id`(string): Unique identifier of the item<br/>`document`(string): Document of the item<br/>`metadata`(map or null): Metadata of the item<br/>`similarity`(float): cosine similarity between query embedding |
+
+- #### ⚡ `remove`
+
+  **Parameters**
+
+  | Name | Type   | Description                         | Required |
+  | ---- | ------ | ----------------------------------- | -------- |
+  | `id` | string | Unique identifier of item to remove | ✅       |
+
+  **Outputs**
+
+  None
+
+- #### ⚡ `clear`
+
+  **Parameters**
+
+  None
+
+  **Outputs**
+
+  None
+
+### 📦 `chromadb_vector_store`
+
+**Parameters**
+
+| Name         | Type   | Description                                               | Required |
+| ------------ | ------ | --------------------------------------------------------- | -------- |
+| `url`        | string | URL of the chromadb server                                | ✅       |
+| `collection` | string | Collection name to use (defaults to `default_collection`) |          |
+
+**Methods**
+
+- #### ⚡ `insert`<a name="faiss_vector_store.insert"></a>
+
+  **Parameters**
+
+  | Name        | Type        | Description                                                         | Required |
+  | ----------- | ----------- | ------------------------------------------------------------------- | -------- |
+  | `embedding` | ndarray     | embedding to insert                                                 | ✅       |
+  | `document`  | string      | original document corresponding to embedding                        | ✅       |
+  | `metadata`  | map or null | arbitrary key-value pairs with JSON-serializable (defaults to null) |          |
+
+  **Outputs**
+
+  | Name | Type   | Description                         |
+  | ---- | ------ | ----------------------------------- |
+  | `id` | string | Unique identifier of the added item |
+
+- #### ⚡ `insert_many`
+
+  **Parameters**
+
+  | Name    | Type         | Description                                                         | Required |
+  | ------- | ------------ | ------------------------------------------------------------------- | -------- |
+  | `items` | array\<map\> | array of objects with [`insert`](#faiss_vector_store.insert) inputs | ✅       |
+
+  **Outputs**
+
+  | Name  | Type            | Description                                                     |
+  | ----- | --------------- | --------------------------------------------------------------- |
+  | `ids` | array\<string\> | Unique identifiers of the added items (same order with `items`) |
+
+- #### ⚡ `get_by_id`
+
+  **Parameters**
+
+  | Name | Type   | Description                       | Required |
+  | ---- | ------ | --------------------------------- | -------- |
+  | `id` | string | Unique identifier of item to find | ✅       |
+
+  **Outputs**
+
+  | Name        | Type    | Description                         |
+  | ----------- | ------- | ----------------------------------- |
+  | `id`        | string  | Unique identifier of the found item |
+  | `embedding` | ndarray | Embedding of the found item         |
+  | `document`  | string  | Document of the found item          |
+  | `metadata`  | map     | Metadata of the found item          |
+
+- #### ⚡ `retrieve`
+
+  **Parameters**
+
+  | Name              | Type   | Description                           | Required |
+  | ----------------- | ------ | ------------------------------------- | -------- |
+  | `query_embedding` | string | Embedding for query message           | ✅       |
+  | `top_k`           | uint   | Number of results to retrieve at most | ✅       |
+
+  **Outputs**
+
+  | Name      | Type         | Description                                                                                                                                                                                                                                                     |
+  | --------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `results` | array\<map\> | Retrieved results where each item consists of<br/>`id`(string): Unique identifier of the item<br/>`document`(string): Document of the item<br/>`metadata`(map or null): Metadata of the item<br/>`similarity`(float): cosine similarity between query embedding |
+
+- #### ⚡ `remove`
+
+  **Parameters**
+
+  | Name | Type   | Description                         | Required |
+  | ---- | ------ | ----------------------------------- | -------- |
+  | `id` | string | Unique identifier of item to remove | ✅       |
+
+  **Outputs**
+
+  None
+
+- #### ⚡ `clear`
+
+  **Parameters**
+
+  None
+
+  **Outputs**
+
+  None
+
+### ⚡ `split_text` (`split_text_separators_recursively`)
+
+**Parameters**
+
+| Name              | Type            | Description                                                                              | Required |
+| ----------------- | --------------- | ---------------------------------------------------------------------------------------- | -------- |
+| `text`            | string          | Text to split                                                                            | ✅       |
+| `chunk_size`      | uint            | Chunk size to split (defaults to `4000`)                                                 |          |
+| `chunk_overlap`   | uint            | Chunk overlap size (defaults to `200`)                                                   |          |
+| `separators`      | array\<string\> | Separators to use (defaults to `["\n\n", "\n", " ", ""]`)                                |          |
+| `length_function` | string          | Length function to use<br/>Available values: `default`, `string` (defaults to `default`) |          |
+
+**Outputs**
+
+| Name     | Type            | Description |
+| -------- | --------------- | ----------- |
+| `chunks` | array\<string\> | Text chunks |
+
+### ⚡ `split_text_by_separator`
+
+**Parameters**
+
+| Name              | Type   | Description                                                                              | Required |
+| ----------------- | ------ | ---------------------------------------------------------------------------------------- | -------- |
+| `text`            | string | Text to split                                                                            | ✅       |
+| `chunk_size`      | uint   | Chunk size to split (defaults to `4000`)                                                 |          |
+| `chunk_overlap`   | uint   | Chunk overlap size (defaults to `200`)                                                   |          |
+| `separator`       | string | Separator to use (defaults to `\n\n`)                                                    |          |
+| `length_function` | string | Length function to use<br/>Available values: `default`, `string` (defaults to `default`) |          |
+
+**Outputs**
+
+| Name     | Type            | Description |
+| -------- | --------------- | ----------- |
+| `chunks` | array\<string\> | Text chunks |
