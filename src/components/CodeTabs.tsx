@@ -1,10 +1,7 @@
-import Tabs, { type Props as TabsProps } from "@theme/Tabs";
+import React from "react";
 
-function CodeTabs(props: TabsProps) {
-  return <Tabs groupId="code-language" {...props} />;
+function CodeTabs({ children }) {
+  return <>{children}</>;
 }
-
-export const pythonTab = { value: "python", label: "Python" };
-export const nodeTab = { value: "node", label: "JavaScript (Node)" };
 
 export default CodeTabs;

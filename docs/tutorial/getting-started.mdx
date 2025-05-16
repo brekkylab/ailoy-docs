@@ -1,15 +1,10 @@
-import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
-import TerminalBox from '@site/src/components/TerminalBox';
-import TabItem from "@theme/TabItem";
-
 # Getting started
 
 The very first step to using Ailoy is to start a `Runtime`.
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 from ailoy import Runtime
 
 # The runtime must be started to use Ailoy
@@ -21,10 +16,7 @@ rt = Runtime()
 rt.stop()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 import { startRuntime } from "ailoy-node";
 
 // The runtime must be started to use Ailoy
@@ -36,7 +28,6 @@ const rt = await startRuntime();
 await rt.stop();
 ```
 
-</TabItem>
 </CodeTabs>
 
 The `Runtime` contains Ailoy’s internal engine. Most of Ailoy’s functionalities
@@ -48,9 +39,8 @@ use the functionality of LLM effortlessly. In this example, we’ll use Alibaba'
 [qwen3](https://github.com/QwenLM/Qwen3) with on-device run.
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 from ailoy import Agent
 
 # Defines an agent.
@@ -63,10 +53,7 @@ agent = Agent(rt, model_name="qwen3-0.6b")
 agent.delete()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 import { defineAgent } from "ailoy-node";
 
 // Defines an agent.
@@ -79,7 +66,6 @@ const agent = await defineAgent(rt, "qwen3-0.6b");
 await agent.delete();
 ```
 
-</TabItem>
 </CodeTabs>
 
 This process may take some time, as it involves downloading the model
@@ -88,19 +74,15 @@ method. The output is returned as an iterator that yields the LLM’s response.
 This can also be considered a single step in successive generation process.
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 # This is where the actual LLM call happens.
 for resp in agent.run("Please give me a short poem about AI"):
     print(resp.content, end='')
 print()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 // This is where the actual LLM call happens
 for await (const resp of agent.run("Please give me a short poem about AI")) {
   process.stdout.write(`${resp.content}`);
@@ -108,16 +90,14 @@ for await (const resp of agent.run("Please give me a short poem about AI")) {
 process.stdout.write("\n");
 ```
 
-</TabItem>
 </CodeTabs>
 
 Then, you may see an output similar to this.
 
 <TerminalBox>
-In the heart of innovation, AI dreams take flight—
-With thoughts that spark and find their way to light.
-It learns and creates, no bound, no strain—
-A world of dreams, where dreams may be found.
+  In the heart of innovation, AI dreams take flight— With thoughts that spark
+  and find their way to light. It learns and creates, no bound, no strain— A
+  world of dreams, where dreams may be found.
 </TerminalBox>
 
 {/* prettier-ignore-start */}
@@ -134,9 +114,8 @@ All done! You've just activated an LLM. 🎉
 Putting it all together, the complete code looks like this:
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumbers
+```python
 from ailoy import Runtime, Agent
 
 # The runtime must be started to use Ailoy
@@ -148,7 +127,7 @@ agent = Agent(rt, model_name="qwen3-0.6b")
 
 # This is where the actual LLM call happens
 for resp in agent.run("Please give me a short poem about AI"):
-  print(resp.content, end='')
+    print(resp.content, end='')
 print()
 
 # Once the agent is no longer needed, it can be released
@@ -158,10 +137,7 @@ agent.delete()
 rt.stop()
 ```
 
-</TabItem>
-<TabItem {...nodeTab}>
-
-```typescript showLineNumbers
+```typescript
 import { startRuntime, defineAgent } from "ailoy-node";
 
 (async () => {
@@ -185,5 +161,4 @@ import { startRuntime, defineAgent } from "ailoy-node";
 })();
 ```
 
-</TabItem>
 </CodeTabs>

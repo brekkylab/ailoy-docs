@@ -1,7 +1,3 @@
-import CodeTabs, { pythonTab, nodeTab } from "@site/src/components/CodeTabs";
-import TerminalBox from '@site/src/components/TerminalBox';
-import TabItem from "@theme/TabItem";
-
 import AiloyInternalSvg from "./img/ailoy-internal.svg";
 
 # Calling low-level APIs
@@ -12,7 +8,9 @@ compute-intensive tasks, such as LLM inference. The `Runtime` serves as a bridge
 between the user and the `VM`, delegating user requests to the `VM` and
 forwarding results back from the `VM` to the user.
 
-<AiloyInternalSvg style={{ width: "50%", height: "50%" }} />
+<p align="center">
+  <AiloyInternalSvg style={{ width: "50%", height: "50%" }} />
+</p>
 
 By using the `Runtime` directly, you can send requests to the `VM` yourself.
 This is useful when you need more advanced configuration or want to call APIs
@@ -28,9 +26,8 @@ For this example, we’ll use Lev Tolstoy’s
 the reference text.
 
 <CodeTabs>
-<TabItem {...pythonTab}>
 
-```python showLineNumber
+```python
 from ailoy import Runtime
 
 rt = Runtime()
@@ -50,13 +47,10 @@ print("*********************************************************")
 
 rt.stop()
 ```
-</TabItem>
-<TabItem {...nodeTab}>
 
-```typescript showLineNumbers
-import { readFile } from "fs/promises";
-
+```typescript
 import { startRuntime } from "ailoy-node";
+import { readFile } from "fs/promises";
 
 (async () => {
   const rt = await startRuntime();
@@ -77,8 +71,9 @@ import { startRuntime } from "ailoy-node";
 })();
 ```
 
-</TabItem>
 </CodeTabs>
+
+{/* prettier-ignore-start */}
 
 <TerminalBox>
 {`
@@ -107,7 +102,11 @@ By this time he had nearly reached the shrine at the bend of the road. Looking u
 
 He came closer, so that it was clearly visible. To his surprise it really was a man, alive or dead, sitting naked, leaning motionless against the shrine. Terror seized the shoemaker, and he thought, “Some one has killed him, stripped him, and left him there. If I meddle I shall surely get into trouble.”
 *********************************************************
+
 `}
+
 </TerminalBox>
+
+{/* prettier-ignore-end */}
 
 (TODO) See low-level API reference for details.
