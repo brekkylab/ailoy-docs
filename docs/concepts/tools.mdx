@@ -1,59 +1,209 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Tools
 
-In Ailoy, a **tool** allows an agent to access functionality beyond what the
-base language model can offer, such as real-time data or domain-specific APIs.
-Each tool is defined using two components:
+In Ailoy, a **tool** allows an agent to access functionality beyond what the base language model can offer, such as real-time data or domain-specific APIs. Each tool is defined using two components:
 
 ### Description
 
-The `description` field defines how the AI understands and uses the tool. It
-follows the standard described in
-[Transformer's tool definitions](https://huggingface.co/docs/transformers/v4.51.3/en/chat_templating_writing#tool-definitions),
-including details such as the tool's name, purpose, input parameters, and
-example usage. This helps the LLM decide _when_ and _how_ to use the tool.
+The `description` field defines how the AI understands and uses the tool. It follows the standard described in [Transformer's tool definitions](https://huggingface.co/docs/transformers/v4.51.3/en/chat_templating_writing#tool-definitions), including details such as the tool's name, purpose, input parameters, and example usage. This helps the LLM decide *when* and *how* to use the tool.
 
 ### Behavior
 
-The `behavior` field defines how the tool actually behaves when invoked. This
-varies depending on the tool type. For example, a REST API tool includes the
-endpoint URL, HTTP method, and headers. A native tool may define a Python
-function, while a universal tool delegates the behavior to a pre-defined module.
+The `behavior` field defines how the tool actually behaves when invoked. This varies depending on the tool type. For example, a REST API tool includes the endpoint URL, HTTP method, and headers. A native tool may define a Python function, while a universal tool delegates the behavior to a pre-defined module.
 
 ## Tool types
 
-There are three types of tools in Ailoy. While they all share a common
-`description` format, each type defines `behavior` differently.
+There are three types of tools in Ailoy. While they all share a common `description` format, each type defines `behavior` differently.
 
 ### Built-in tools
 
-Built-in tools uses the function of Ailoy’s internal module system. It work
-across all environments. These tools are pre-registered and can be referenced by
-name.
+Built-in tools uses the function of Ailoy’s internal module system. It work across all environments. These tools are pre-registered and can be referenced by name.
 
 **Behavior**: Defined by preset behavior implemented inside Ailoy.
 
+```json
+{
+  "outputPath": "value"
+}
+```
+
 ### Native tools
 
-Native tools allow developers to define custom Python functions that will be
-executed when the AI requests a tool call. This is useful for logic that lives
-inside your application.
+Native tools allow developers to define custom Python functions that will be executed when the AI requests a tool call. This is useful for logic that lives inside your application.
 
-**Behavior**: A Python function or coroutine that will be called with arguments
-from the AI.
+**Behavior**: A Python function or coroutine that will be called with arguments from the AI.
 
 ### RESTAPI tools
 
-RESTAPI tools allow the AI to access external APIs over HTTP. This is ideal for
-retrieving real-time or third-party information.
+RESTAPI tools allow the AI to access external APIs over HTTP. This is ideal for retrieving real-time or third-party information.
 
-**Behavior**: TODO
+**Behavior**: Getting results by applying the given JMESPath to the result of GET request sent with the given URL, Headers, and Parameters.
 
-## Available tools
+```json
+{
+    "behavior": {
+        "baseURL": "https://api.themoviedb.org/3/search/movie",
+        "method": "GET",
+        "authentication": "bearer",
+        "headers": {
+            "accept": "application/json"
+        },
+        "outputPath": "results[:5].{id: id, title: title, overview: overview, original_language: original_language, genre_ids: genre_ids, release_date: release_date, vote_average: vote_average, adult:adult}"
+    }
+}
+```
+
+## Out-of-the-box tools
 
 ### Calculator
+A calculator that evaluates a mathatical expression as a floating-point number.
+
+The expression string can include floating-point numbers, arithmetic operators (`+`, `-`, `*`, `/`, `%`, `^`), parentheses, and the mathematical constants and functions listed below.
+
+For example,
+- `"sqrt(3^2 + 4^2)"` evaluates to `5.0`
+- `"6/2*(1+2)"` evaluates to `9.0`
+- `"sin(pi/2)"` evaluates to `1.0`.
+
+#### Mathematical Constants and Functions
+Behaviors of these are same as ones in **[cmath](https://en.cppreference.com/w/cpp/header/cmath)**.
+
+ - `e`
+ - `pi`
+
+ - `sqrt(x)`
+ - `cbrt(x)`
+ - `abs(x)`
+ - `floor(x)`
+ - `ceil(x)`
+
+ - `ln(x)`
+ - `log(x)`
+ - `log10(x)`
+
+ - `sin(x)`
+ - `cos(x)`
+ - `tan(x)`
+ - `asin(x)`
+ - `acos(x)`
+ - `atan(x)`
+ - `atan2(y,x)`
+
+ - `sinh(x)`
+ - `cosh(x)`
+ - `tanh(x)`
+
+ - `fac(n)`
+ - `ncr(n,r)`
+ - `npr(n,r)`
+
+#### Example message to use this tool
+`Evaluate sin(pi/2).`
 
 ### Frankfurters
+A public API provided by the European Central Bank that provides currency exchange rate information.
+
+#### Example message to use this tool
+`I want to buy 100 U.S. Dollar with my Korean Won. How much do I need to take?`
 
 ### TMDB
+The API provided by **[TMDB](https://www.themoviedb.org/)**, the fully open source movie database service. 
 
-### Nytimes
+#### Tools
+- `tmdb_trending_movies`: *Get the trending movies on TMDB.*
+- `tmdb_movie_search`: *Search for movies by their original, translated and alternative titles.*
+- `tmdb_movie_reviews`: *Get the user reviews for a movie.*
+- `tmdb_movie_recommendations`: *Recommend movies based on the movie ID.*
+- `tmdb_movie_watch_providers`: *Get the list of streaming providers we have for a movie in some coutries.*
+- `tmdb_movie_genre_names`: *Get the list of genre names with their ids.*
+
+
+#### API key
+You can get a TMDB API key here: **[link](https://www.themoviedb.org/settings/api)**
+
+<Tabs>
+<TabItem value="py" label="Python">
+```python
+tmdb_api_key = ...
+
+with Agent(...) as agent:
+  agent.add_tools_from_preset(
+    "tmdb",
+    authenticator=BearerAuthenticator(tmdb_api_key),
+  )
+```
+</TabItem>
+<TabItem value="node" label="JavaScript(Node)">
+```typescript
+tmdbApiKey = ...
+
+const agent = await defineAgent(rt, "qwen3-8b");
+agent.addToolsFromPreset("tmdb", {
+  authenticator: bearerAutenticator(tmdbApiKey),
+});
+```
+</TabItem>
+</Tabs>
+
+#### Example message to use this tool
+`Show me some recently famous movies.`
+
+`Can you find me every Iron Man movies?`
+
+`Recommend me some movies similar to Inception of Christopher Nolan.`
+
+
+### New York Times
+The API provided by **[New York Times](https://nytimes.com/)**, a famous American daily newspaper based in New York City.
+
+#### Tools
+- `nytimes_article_search`: *Search New York Times articles by keyword*
+
+#### API key
+You can get a New York Times API key here: **[link](https://developer.nytimes.com/get-started)**
+
+When you add tool to your agent, the API key can be provided.
+NY Times API requires to put API key in the query parameter, so you can add it to the query parameter as below.
+
+This is an example of applying authentication in the way you want.
+
+<CodeTabs>
+```python
+nytimes_api_key = ...
+
+with Agent(...) as agent:
+
+  def nytimes_authenticator(request):
+      from urllib.parse import parse_qsl, urlencode, urlparse
+
+      parts = urlparse(request.get("url", ""))
+      qs = {**dict(parse_qsl(parts.query)), "api_key": nytimes_api_key}
+      parts = parts._replace(query=urlencode(qs))
+      return {**request, "url": parts.geturl()}
+
+  agent.add_tools_from_preset(
+      "nytimes",
+      authenticator=nytimes_authenticator,
+  )
+```
+
+```typescript
+const agent = await createAgent(...);
+const authenticator: ToolAuthenticator = {
+  apply: (request) => {
+    let url = new URL(request.url);
+    url.searchParams.append("api-key", nytimesApiKey);
+    request.url = url.toString();
+    return request;
+  },
+};
+agent.addToolsFromPreset("nytimes", {
+  authenticator,
+});
+```
+</CodeTabs>
+
+#### Example message to use this tool
+`Find me some articles about 'Agentic AI'.`
