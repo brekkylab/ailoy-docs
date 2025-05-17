@@ -26,8 +26,15 @@ const sidebars: SidebarsConfig = {
         "tutorial/rag-with-vector-store",
       ],
     },
-    "agent-response-format",
-    "tools",
+    {
+      type: "category",
+      label: "Concepts",
+      items: [
+        "concepts/architecture",
+        "concepts/agent-response-format",
+        "concepts/tools",
+      ],
+    },
   ],
 };
 
