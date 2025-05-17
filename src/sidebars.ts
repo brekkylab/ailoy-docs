@@ -26,8 +26,28 @@ const sidebars: SidebarsConfig = {
         "tutorial/rag-with-vector-store",
       ],
     },
-    "agent-response-format",
-    "tools",
+    {
+      type: "category",
+      label: "Concepts",
+      items: ["concepts/agent-response-format", "concepts/tools"],
+    },
+    {
+      type: "category",
+      label: "API References",
+      items: [
+        "api-references/internal-runtime-apis",
+        {
+          type: "html",
+          value: `<a href="/pydocs/index.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">Python API References</a>`,
+          defaultStyle: true,
+        },
+        {
+          type: "html",
+          value: `<a href="/tsdocs/index.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">Javascript(Node) API References</a>`,
+          defaultStyle: true,
+        }
+      ],
+    }
   ],
 };
 
