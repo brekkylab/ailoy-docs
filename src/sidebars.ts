@@ -19,6 +19,7 @@ const sidebars: SidebarsConfig = {
       label: "Tutorial",
       items: [
         "tutorial/getting-started",
+        "tutorial/multi-turn-conversation",
         "tutorial/reasoning",
         "tutorial/using-tools",
         "tutorial/integrate-with-mcp",

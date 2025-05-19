@@ -1,0 +1,99 @@
+# Multi-turn conversation
+
+Multi-turn conversation is a basic feature of the LLM applications, which implements a continuous flow of conversation by providing context for multiple stages of interactions.
+
+## Using Agent
+
+Ailoy's high-level API `Agent` maintains the query/response history, so a multi-turn conversation with LLM can be implemented naturally by repeatedly sending queries to `Agent` and receiving the responses  in the code context.
+<CodeTabs>
+
+```python
+with Agent(...) as agent:
+  while True:
+    query = input("\nUser: ")
+
+    if query == "exit":
+        break
+    if query == "":
+        continue
+
+    for resp in agent.query(query):
+      print(resp.content, end="")
+```
+
+```typescript
+const agent = await defineAgent(...);
+while (true) {
+  const query = await getUserInput("User: ");
+
+  if (query === "exit")
+    break;
+  if (query === "")
+    continue;
+
+  process.stdout.write(`\nAssistant: `);
+  for await (const resp of agent.run(query)) {
+    process.stdout.write(resp.content);
+  }
+}
+await agent.delete();
+```
+
+</CodeTabs>
+
+To reset the conversation and restart from scratch, you can clear the messages in agent.
+
+<CodeTabs>
+
+```python
+with Agent(...) as agent:
+  for resp in agent.query(query):
+    print(resp.content, end="")
+  agent._messages.clear()  ############ 
+```
+
+```typescript
+const agent = await defineAgent(...);
+agent.reset();            //////// Not implemented
+await agent.delete();
+```
+
+</CodeTabs>
+
+## Using low-level APIs
+:::note
+Refer to [Calling low-level APIs](docs/tutorial/calling-low-level-apis) for details on using the low-level API.
+:::
+
+And also, Ailoy provide the context of more freely structured conversations through low-level `Runtime` API calls for more in-depth utilization of multi-turn conversation.
+
+
+<CodeTabs>
+
+```python
+from ailoy import Agent
+
+# Defines an agent.
+# During this step, the model parameters are downloaded and the LLM is set up for execution
+agent = Agent(rt, model_name="qwen3-0.6b")
+
+# ... (your code) ...
+
+# Once the agent is no longer needed, it can be released
+agent.delete()
+```
+
+```typescript
+import { defineAgent } from "ailoy-node";
+
+// Defines an agent.
+// During this step, the model parameters are downloaded and the LLM is set up for execution
+const agent = await defineAgent(rt, "qwen3-0.6b");
+
+// ... (your code) ...
+
+// Once the agent is no longer needed, it can be released
+await agent.delete();
+```
+
+</CodeTabs>
