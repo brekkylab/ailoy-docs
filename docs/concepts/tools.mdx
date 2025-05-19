@@ -63,7 +63,9 @@ The parameters that the LLM decided to put into the REST API tool can become:
 
 Built-in tools uses the function of Ailoy’s internal module system. It work across all the environments supported. These tools are pre-registered and can be referenced by name.
 
-**Behavior**: Defined by preset behavior implemented inside Ailoy. The only thing defined outside of Ailoy is the JMESPath query string(`outputPath`) to process the raw results of the function into useful data.
+#### Behavior
+
+Defined by preset behavior implemented inside Ailoy. The only thing defined outside of Ailoy is the JMESPath query string(`outputPath`) to process the raw results of the function into useful data.
 
 
 ```json
@@ -80,7 +82,9 @@ Built-in tools uses the function of Ailoy’s internal module system. It work ac
 
 Native tools allow developers to define custom Python functions that will be executed when the AI requests a tool call. This is useful for logic that lives inside your application.
 
-**Behavior**: A Python or Node.js function or coroutine that will be called with arguments from the AI.
+#### Behavior
+
+A Python or Node.js function or coroutine that will be called with arguments from the AI.
 
 <CodeTabs>
 ```python
