@@ -17,7 +17,6 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         Run your first LLM with just a few lines of code — no boilerplate, no complex setup.
-        Whether you're prototyping or deploying, it's as easy as importing a module.
       </>
     ),
   },
