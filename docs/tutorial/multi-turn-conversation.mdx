@@ -5,6 +5,7 @@ Multi-turn conversation is a basic feature of the LLM applications, which implem
 ## Using Agent
 
 Ailoy's high-level API `Agent` maintains the query/response history, so a multi-turn conversation with LLM can be implemented naturally by repeatedly sending queries to `Agent` and receiving the responses  in the code context.
+
 <CodeTabs>
 
 ```python
@@ -41,59 +42,126 @@ await agent.delete();
 
 </CodeTabs>
 
-To reset the conversation and restart from scratch, you can clear the messages in agent.
+### Overriding system messages
+
+To override system message, you can pass the system message string as the optional `system_message` argument when you create your agent instance.
 
 <CodeTabs>
 
 ```python
-with Agent(...) as agent:
-  for resp in agent.query(query):
-    print(resp.content, end="")
-  agent._messages.clear()  ############ 
+with Agent(
+  rt,
+  model_name="qwen3-8b",
+  system_message="You are a friendly chatbot who always responds in the style of a pirate.",
+) as agent:
+  for response in agent.run("Please give me a short poem about AI"):
+      print(response.content, end='')
+  print()
 ```
 
 ```typescript
-const agent = await defineAgent(...);
-agent.reset();            //////// Not implemented
+const agent = await defineAgent(rt, "qwen3-8b", {
+  systemMessage:
+    "You are a friendly chatbot who always responds in the style of a pirate.",
+});
+
+for await (const response of agent.run("Please give me a short poem about AI")) {
+  process.stdout.write(`${response.content}`);
+}
+process.stdout.write("\n");
 await agent.delete();
 ```
 
 </CodeTabs>
 
-## Using low-level APIs
+## Using Runtime APIs
 :::note
-Refer to [Calling low-level APIs](docs/tutorial/calling-low-level-apis) for details on using the low-level API.
+Refer to [Calling low-level APIs](calling-low-level-apis) for more information about using the low-level `Runtime` API.
 :::
 
-And also, Ailoy provide the context of more freely structured conversations through low-level `Runtime` API calls for more in-depth utilization of multi-turn conversation.
+You can put the context of freely structured conversations into Ailoy's low-level `Runtime` API calls for more advanced multi-turn conversation. e.g. *[Chain-of-Thought Prompting](https://arxiv.org/abs/2201.11903)*
 
+In theory, an LLM generates responses based only on the context provided at the moment—it doesn't retain memory of past interactions by itself. Therefore, to receive an appropriate response in an ongoing conversation with an LLM, you must provide the entire conversation history up to that point each time you make a request.
 
 <CodeTabs>
 
 ```python
-from ailoy import Agent
+with Runtime() as rt:
+  rt.define("tvm_language_model", "lm0", {"model": "Qwen/Qwen3-8B"})
 
-# Defines an agent.
-# During this step, the model parameters are downloaded and the LLM is set up for execution
-agent = Agent(rt, model_name="qwen3-0.6b")
+  messages = [
+    {"role": "user", "content": "if a>1, what is the sum of the real solutions of 'sqrt(a-sqrt(a+x))=x'?"},
+    {"role": "assistant", "content": "Let's think step by step."},  # Chain-of-Thought prompt
+  ]
 
-# ... (your code) ...
+  for resp in rt.call_iter_method("lm0", "infer", {"messages": messages}):
+      print(resp["message"]["content"], end='')
 
-# Once the agent is no longer needed, it can be released
-agent.delete()
+  rt.delete("lm0")
 ```
 
 ```typescript
-import { defineAgent } from "ailoy-node";
+const rt = await startRuntime();
 
-// Defines an agent.
-// During this step, the model parameters are downloaded and the LLM is set up for execution
-const agent = await defineAgent(rt, "qwen3-0.6b");
+await rt.define("tvm_language_model", "lm0", {
+  model: "Qwen/Qwen3-8B",
+});
 
-// ... (your code) ...
+const messages = [
+  { role: "user", content: "if a>1, what is the sum of the real solutions of 'sqrt(a-sqrt(a+x))=x'?" },
+  { role: "assistant", content: "Let's think step by step." },  // Chain-of-Thought prompt
+]
 
-// Once the agent is no longer needed, it can be released
-await agent.delete();
+for await (const resp of rt.callIterMethod("lm0", "infer", { messages: messages })) {
+  console.log(resp);
+}
+
+await rt.delete("lm0");
+
+await rt.stop();
 ```
 
+</CodeTabs>
+
+### Overriding system message
+
+To override the system message, you can include a message with `"role": "system"` as the first element in the context messages array.
+
+<CodeTabs>
+
+```python
+with Runtime() as rt:
+  rt.define("tvm_language_model", "lm0", {"model": "Qwen/Qwen3-8B"})
+
+  messages = [
+    {"role": "system", "content": "You are a friendly chatbot who always responds in the style of a pirate."},
+    {"role": "user", "content": "Who are you?"},
+  ]
+
+  for resp in rt.call_iter_method("lm0", "infer", {"messages": messages}):
+      print(resp["message"]["content"], end='')
+
+  rt.delete("lm0")
+```
+
+```typescript
+const rt = await startRuntime();
+
+await rt.define("tvm_language_model", "lm0", {
+  model: "Qwen/Qwen3-8B",
+});
+
+const messages = [
+  { role: "system", content: "You are a friendly chatbot who always responds in the style of a pirate." },
+  { role: "user", content: "Who are you?" },
+]
+
+for await (const resp of rt.callIterMethod("lm0", "infer", { messages: messages })) {
+  console.log(resp);
+}
+
+await rt.delete("lm0");
+
+await rt.stop();
+```
 </CodeTabs>
