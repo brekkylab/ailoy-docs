@@ -46,14 +46,14 @@ It's ideal for embedded assistants, workflow automation, or even building your o
 No need to wrestle with complex orchestration frameworks or deep ML stack knowledge. With Ailoy, you can just import and go.
 Ailoy is designed to feel like any modern developer library.
 
-**2. Cloud or On-Device—Your Choice**
+**2. Cloud or On-Device**
 
 Ailoy supports both cloud vendors like OpenAI and on-device inference using optimized runtimes via TVM.
 Even better, you can mix both seamlessly in a single application.
 
 Want to run models offline to save on API costs? You can.
 Need to fall back to the cloud when local resources aren't enough? That works too.
-Or maybe you're building a hybrid that combines local tools with remote reasoning—Ailoy makes that easy.
+Or maybe you're building a hybrid that combines local tools with remote reasoning — Ailoy makes that easy.
 It's also a great fit for secure or privacy-sensitive environments where cloud access isn't an option.
 
 **3. Versatility Across Architectures**
