@@ -8,7 +8,7 @@ import remarkCodeTabs from "./src/plugins/remark-code-tabs";
 
 const config: Config = {
   title: "Ailoy",
-  tagline: "Dinosaurs are cool",
+  tagline: "Drop it in. Embed an LLM in your code instantly.",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
