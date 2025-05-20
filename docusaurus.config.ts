@@ -97,6 +97,12 @@ const config: Config = {
               label: "Tutorial",
               to: "/docs/tutorial/getting-started",
             },
+            {
+              html: `<a href="/pydocs/index.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">Python API References</a>`,
+            },
+            {
+              html: `<a href="/tsdocs/index.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">Javascript(Node) API References</a>`,
+            },
           ],
         },
         {
