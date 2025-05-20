@@ -1,23 +1,23 @@
-yangshun:
-  name: Yangshun Tay
-  title: Front End Engineer @ Facebook
-  url: https://github.com/yangshun
-  image_url: https://github.com/yangshun.png
+jhlee:
+  name: Lee Jaehwan
+  title: Brekkylab
   page: true
   socials:
-    x: yangshunz
-    github: yangshun
+    github: jhlee525
+    linkedin: jaehwanlee90
 
-slorber:
-  name: Sébastien Lorber
-  title: Docusaurus maintainer
-  url: https://sebastienlorber.com
-  image_url: https://github.com/slorber.png
-  page:
-    # customize the url of the author page at /blog/authors/<permalink>
-    permalink: '/all-sebastien-lorber-articles'
+oceanjoon:
+  name: Kim Haejoon
+  title: Brekkylab
+  page: true
   socials:
-    x: sebastienlorber
-    linkedin: sebastienlorber
-    github: slorber
-    newsletter: https://thisweekinreact.com
+    github: khj809
+    linkedin: haejoon-kim-406213267
+
+wrpark:
+  name: Park Woorak
+  title: Brekkylab
+  page: true
+  socials:
+    github: grf53
+    linkedin: 박우락
