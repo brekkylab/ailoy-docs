@@ -7,7 +7,7 @@ tags: [ailoy]
 
 # Introducing Ailoy: A Drop-in Library for LLM & Agent Development
 
-We’re excited to announce the launch of **Ailoy**, a lightweight library that makes it easy to integrate AI and autonomous agents into your software.
+We’re excited to announce the launch of **Ailoy**, a Drop-in Library for LLM & Agent Development.
 
 In recent years, LLMs and agents have become central to AI-driven applications.
 Yet for many developers, even building a proof of concept can be daunting.
@@ -19,7 +19,7 @@ Taking it to a production level? That’s even harder.
 
 **Ailoy** is designed to solve these challenges.
 We focused on on-device AI, which avoids complex setups and cloud costs by running entirely on the local machine.
-But to access truly high-end AI capabilities, cloud APIs still play an important role.
+But to access high-end AI capabilities, cloud APIs still play an important role.
 Our goal is to keep the right balance between the two.
 **Ailoy** works seamlessly across cloud, on-device, and even hybrid environments, helping you build and deploy advanced AI functionality with minimal overhead.
 
@@ -48,12 +48,12 @@ Ailoy is designed to feel like any modern developer library.
 
 **2. Cloud or On-Device—Your Choice**
 
-Ailoy supports both cloud vendors like `OpenAI` and on-device inference using optimized runtimes via `TVM`.
+Ailoy supports both cloud vendors like OpenAI and on-device inference using optimized runtimes via TVM.
 Even better, you can mix both seamlessly in a single application.
 
-- Want to run models offline to save on API costs? ✔️
-- Need to fall back to the cloud when local resources aren't enough? ✔️
-- Building a hybrid that uses local tools with remote reasoning? ✔️
+Want to run models offline to save on API costs? You can.
+Need to fall back to the cloud when local resources aren't enough? That works too.
+Or maybe you're building a hybrid that combines local tools with remote reasoning, Ailoy makes that easy.
 
 **3. Versatility Across Architectures**
 
