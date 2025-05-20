@@ -7,7 +7,7 @@ tags: [ailoy]
 
 # Introducing Ailoy: A Drop-in Library for LLM & Agent Development
 
-We’re excited to announce the launch of **Ailoy**, a Drop-in Library for LLM & Agent Development.
+We’re excited to announce the launch of **Ailoy**, a drop-in library for LLM & agent development.
 
 In recent years, LLMs and agents have become central to AI-driven applications.
 Yet for many developers, even building a proof of concept can be daunting.
@@ -113,12 +113,12 @@ This hybrid approach empowers developers to build advanced AI applications while
 ## 🤝 Join Us on the Journey
 
 We believe accessible AI infrastructure can unlock a whole new class of applications. Whether you're an indie developer, a startup team, or part of a large organization, Ailoy is here to help you:
-- Reduce reliance on expensive API keys
-- Iterate faster and more efficiently
-- Bring AI to environments where privacy or connectivity constraints make cloud usage challenging
 
-As we continue expanding Ailoy’s capabilities.
-we invite you to be part of the journey. Your feedback, ideas, and use cases will shape what Ailoy becomes.
+- Build and ship on-device AI applications without worrying about recurring cloud costs
+- Streamline your development process with intuitive APIs and minimal setup
+- Run AI in environments where privacy, offline access, or security make cloud services impractical
+
+As we continue expanding Ailoy’s capabilities, we invite you to be part of the journey. Your feedback, ideas, and use cases will shape what Ailoy becomes.
 
 **Ready to build?**
 
