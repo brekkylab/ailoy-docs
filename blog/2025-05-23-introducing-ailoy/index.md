@@ -9,10 +9,10 @@ tags: [ailoy]
 
 We’re excited to announce the launch of **Ailoy**, a drop-in library for LLM & agent development.
 
-In recent years, LLMs and agents have become central to AI-driven applications.
+Large Language Models (LLMs) and AI agents have recently emerged as a major trend in the software industry, drawing significant attention.
 Yet for many developers, even building a proof of concept can be daunting.
 It often requires deep knowledge of machine learning, experience with parallel programming.
-Cloud API can ease the problem but cost problem exists.
+Cloud APIs can ease the burden, but they introduce new cost concerns.
 Taking it to a production level? That’s even harder.
 
 <!-- truncate -->
@@ -53,7 +53,8 @@ Even better, you can mix both seamlessly in a single application.
 
 Want to run models offline to save on API costs? You can.
 Need to fall back to the cloud when local resources aren't enough? That works too.
-Or maybe you're building a hybrid that combines local tools with remote reasoning, Ailoy makes that easy.
+Or maybe you're building a hybrid that combines local tools with remote reasoning—Ailoy makes that easy.
+It's also a great fit for secure or privacy-sensitive environments where cloud access isn't an option.
 
 **3. Versatility Across Architectures**
 
@@ -112,13 +113,15 @@ This hybrid approach empowers developers to build advanced AI applications while
 
 ## 🤝 Join Us on the Journey
 
-We believe accessible AI infrastructure can unlock a whole new class of applications. Whether you're an indie developer, a startup team, or part of a large organization, Ailoy is here to help you:
+We believe accessible AI infrastructure can unlock a whole new class of applications.
+Whether you're an indie developer, a startup team, or part of a large organization, Ailoy is here to help you:
 
-- Build and ship on-device AI applications without worrying about recurring cloud costs
 - Streamline your development process with intuitive APIs and minimal setup
+- Build and ship on-device AI applications without worrying about high cloud costs
 - Run AI in environments where privacy, offline access, or security make cloud services impractical
 
-As we continue expanding Ailoy’s capabilities, we invite you to be part of the journey. Your feedback, ideas, and use cases will shape what Ailoy becomes.
+As we continue expanding Ailoy’s capabilities, we invite you to be part of the journey.
+Your feedback, ideas, and use cases will shape what Ailoy becomes.
 
 **Ready to build?**
 
