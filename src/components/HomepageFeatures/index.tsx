@@ -22,7 +22,7 @@ const FeatureList: FeatureItem[] = [
     ),
   },
   {
-    title: "☁️ Cloud or On-Device, Same Simple Call",
+    title: "☁️ Cloud or On-Device",
     Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
     description: (
       <>
