@@ -34,6 +34,7 @@ const sidebars: SidebarsConfig = {
         "concepts/architecture",
         "concepts/agent-response-format",
         "concepts/tools",
+        "concepts/command-line-interfaces",
       ],
     },
     {
