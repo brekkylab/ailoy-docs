@@ -33,7 +33,7 @@ Whether you're building a chatbot, an intelligent agent, or enhancing an existin
 It provides:
 
 - High-level APIs to run LLMs, including multi-turn conversations, system prompt customization, and reasoning
-- Built-in tools and functions for constructing agent-based systems, including `MCP`
+- Built-in tools and functions for constructing agent-based systems, including *Model Context Protocol (MCP)*
 - Easy agent creation and simplified integration of *Retrieval-Augmented Generation (RAG)*
 
 Think of it as your AI development toolkit.
@@ -58,7 +58,7 @@ It's also a great fit for secure or privacy-sensitive environments where cloud a
 
 **3. Versatility Across Architectures**
 
-It Supports Windows, macOS, and Linux.
+Ailoy supports Windows, macOS, and Linux.
 And it works with both Python and Node.js environment.
 
 We're continuously expanding our platform and language coverage to make Ailoy available wherever developers build.
@@ -86,7 +86,7 @@ While Ailoy strives for universality, there are a few constraints to keep in min
 LLMs are still resource-intensive.
 On-device execution requires a capable system, and performance can vary significantly across platforms.
 
-On `macOS`, `Metal` has made it relatively easy to run LLMs locally.
+On `macOS`, Apple silicon has made it relatively easy to run LLMs locally thanks to it's unified memory architecture and `Metal`.
 However, older MacBooks may struggle to meet the performance demands.
 On `Windows` and `Linux`, we currently rely on `Vulkan` for LLM execution, where GPU acceleration is often essential for achieving usable inference speeds.
 As for mobile devices, we believe it's still too early for practical on-device LLM execution due to hardware limitations.
