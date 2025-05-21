@@ -1,0 +1,130 @@
+# Command Line Interfaces
+
+Ailoy includes a Command Line Interface (CLI) that allows users to manage
+resources used within the Ailoy ecosystem. The CLI is installed alongside the
+Ailoy package in both Python and Node.js environments.
+
+Once you've completed the installation, you can run the `ailoy` command as shown
+below:
+
+<TerminalBox>
+```bash
+$ ailoy
+                                                                                                                                          
+ Usage: ailoy [OPTIONS] COMMAND [ARGS]...                                                                                                 
+                                                                                                                                          
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --install-completion          Install completion for the current shell.                                                                │
+│ --show-completion             Show completion for the current shell, to copy it or customize the installation.                         │
+│ --help                        Show this message and exit.                                                                              │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ model                                                                                                                                  │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+````
+</TerminalBox>
+
+{/* prettier-ignore-start */}
+
+:::note
+The terminal output in this documentation assumes that the CLI was installed via the Python package.
+If you installed it via the Node.js package, the output may differ slightly.
+:::
+
+{/* prettier-ignore-end */}
+
+## Commands
+
+### `ailoy model`
+
+Manages AI models used in Ailoy.
+
+<TerminalBox>
+```bash
+$ ailoy model
+
+ Usage: ailoy model [OPTIONS] COMMAND [ARGS]...
+
+╭─ Options ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                                                            │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ list                                                                                                                                   │
+│ download                                                                                                                               │
+│ remove                                                                                                                                 │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+````
+
+</TerminalBox>
+
+#### `ailoy model list`
+
+Lists all available models in the local cache directory.
+
+{/* prettier-ignore-start */}
+
+<TerminalBox>
+```bash
+$ ailoy model list
+                                                    List models in local cache                                                    
+┏━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Type ┃ Model ID        ┃ Attributes            ┃ Path                                                         ┃   Size   ┃
+┡━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━┩
+│ tvm  │ BAAI/bge-m3     │ quantization: q4f16_1 │ /Users/user/.cache/ailoy/tvm-models/BAAI--bge-m3/q4f16_1     │ 321.7MiB │
+│      │                 │ device: metal         │                                                              │          │
+│ tvm  │ Qwen/Qwen3-0.6B │ quantization: q4f16_1 │ /Users/user/.cache/ailoy/tvm-models/Qwen--Qwen3-0.6B/q4f16_1 │ 333.6MiB │
+│      │                 │ device: metal         │                                                              │          │
+│ tvm  │ Qwen/Qwen3-1.7B │ quantization: q4f16_1 │ /Users/user/.cache/ailoy/tvm-models/Qwen--Qwen3-1.7B/q4f16_1 │ 937.0MiB │
+│      │                 │ device: metal         │                                                              │          │
+│ tvm  │ Qwen/Qwen3-4B   │ quantization: q4f16_1 │ /Users/user/.cache/ailoy/tvm-models/Qwen--Qwen3-4B/q4f16_1   │  2.1GiB  │
+│      │                 │ device: metal         │                                                              │          │
+│ tvm  │ Qwen/Qwen3-8B   │ quantization: q4f16_1 │ /Users/user/.cache/ailoy/tvm-models/Qwen--Qwen3-8B/q4f16_1   │  4.3GiB  │
+│      │                 │ device: metal         │                                                              │          │
+└──────┴─────────────────┴───────────────────────┴──────────────────────────────────────────────────────────────┴──────────┘
+```
+</TerminalBox>
+
+{/* prettier-ignore-end */}
+
+#### `ailoy model download <model-id>`
+
+Downloads the specified model using the given model ID and required attributes.
+Currently, the only supported model type is `tvm`, so you must specify the
+`--quantization` and `--device` options.
+
+{/* prettier-ignore-start */}
+
+<TerminalBox>
+
+```bash
+$ ailoy model download Qwen/Qwen3-0.6B --quantization q4f16_1 --device metal
+Downloading params_shard_0.bin [█████████████████████████████████████████         ] 82% [00m:02s]
+
+# after download completed
+Successfully downloaded Qwen/Qwen3-0.6B in /Users/user/.cache/ailoy/tvm-models/Qwen--Qwen3-0.6B/q4f16_1
+
+````
+
+</TerminalBox>
+
+{/* prettier-ignore-end */}
+
+#### `ailoy model remove <model-id>`
+
+Removes the specified model by its ID.  
+You'll be prompted to confirm the deletion by entering `Y`(`y`) or `N`(`n`).
+
+{/* prettier-ignore-start */}
+
+<TerminalBox>
+
+```bash
+$ ailoy model remove Qwen/Qwen3-0.6B
+Are you sure you want to remove model "Qwen/Qwen3-0.6B"? (y/n)y
+Successfully removed Qwen/Qwen3-0.6B in /Users/user/.cache/ailoy/tvm-models/Qwen--Qwen3-0.6B
+````
+
+</TerminalBox>
+
+{/* prettier-ignore-end */}
