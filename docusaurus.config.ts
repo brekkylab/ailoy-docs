@@ -8,7 +8,7 @@ import remarkCodeTabs from "./src/plugins/remark-code-tabs";
 
 const config: Config = {
   title: "Ailoy",
-  tagline: "Dinosaurs are cool",
+  tagline: "Drop it in. Embed an LLM in your code instantly.",
   favicon: "img/favicon.ico",
 
   // Set the production url of your site here
@@ -96,6 +96,12 @@ const config: Config = {
             {
               label: "Tutorial",
               to: "/docs/tutorial/getting-started",
+            },
+            {
+              html: `<a href="/pydocs/index.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">Python API References</a>`,
+            },
+            {
+              html: `<a href="/tsdocs/index.html" target="_blank" rel="noopener noreferrer" style="text-decoration: none;">Javascript(Node) API References</a>`,
             },
           ],
         },

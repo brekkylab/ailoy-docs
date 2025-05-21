@@ -12,32 +12,30 @@ type FeatureItem = {
 
 const FeatureList: FeatureItem[] = [
   {
-    title: "Easy to Use",
+    title: "🚀 Simple by Design",
     Svg: require("@site/static/img/undraw_docusaurus_mountain.svg").default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Run your first LLM with just a few lines of code — no boilerplate, no complex setup.
       </>
     ),
   },
   {
-    title: "Focus on What Matters",
+    title: "☁️ Cloud or On-Device",
     Svg: require("@site/static/img/undraw_docusaurus_tree.svg").default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Use the same API to run large models in the cloud or optimized ones directly on-device.
+        That flexibility keeps you in full control of your stack.
       </>
     ),
   },
   {
-    title: "Powered by React",
+    title: "💻 Cross-Platform & Multi-Language",
     Svg: require("@site/static/img/undraw_docusaurus_react.svg").default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Supports Windows, Linux, and macOS — with clean APIs for Python and JavaScript.
       </>
     ),
   },
