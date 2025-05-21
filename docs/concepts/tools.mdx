@@ -1,6 +1,12 @@
 # Tools
 
-In Ailoy, a **tool** allows an agent to access functionality beyond what the base language model can offer, such as real-time data or domain-specific APIs. Each tool is defined using two components:
+:::info
+To see the basic usage of tools, refer to **[Using Tools](/docs/tutorial/using-tools)** page.
+:::
+
+In Ailoy, a **tool** allows an agent to access functionality beyond what the base language model can offer, such as real-time data or domain-specific APIs.
+
+Each tool is defined using two components:
 
 ### Description
 
@@ -10,7 +16,7 @@ The `description` field defines how the AI understands and uses the tool. It fol
 
 The `behavior` field defines how the tool actually behaves when invoked. This varies depending on the tool type. For example, a REST API tool includes the endpoint URL, HTTP method, and headers. A native tool may define a Python or Node.js function, while a built-in tool delegates the behavior to a pre-defined module.
 
-To see the examples, take a look at the **[out-of-the-box tools](#out-of-the-box-tools)**.
+To see the examples, take a look at the **[Out-of-the-box tools](#out-of-the-box-tools)** section.
 
 ## Types
 
@@ -28,7 +34,7 @@ The `behavior` object of a REST API tool definition can contain:
 - URL(`baseURL`), HTTP method(`method`) and headers(`headers`) to define the REST API request to send.
 
 - Authentication method(`authentication`) to apply pre-defined authentication injection.
-If the API does not require authentication or needs custom one, the authentication field may not be contained.
+If the API does not require authentication or needs custom one, the authentication field might not be contained.
 
 - Body content(`body`) to be the requests body of `POST` or `PUT` requests.
 
@@ -40,12 +46,14 @@ The parameters that the LLM decided to put into the REST API tool can become:
 - Body parameters: Ones included as `{param_name}` in the `body` field
 - Query parameters: Ones other than path parameters or body parameters
 
+***Tool definition*** for a REST API tool finally looks like:
+
 ```json
 {
   "type": "restapi",
   "description": {...},
   "behavior": {
-    "baseURL": "https://api.themoviedb.org/3/search/movie",
+    "baseURL": "https://api.themoviedb.org/3/movie/${movie_id}/recommendations",
     "method": "GET",
     "authentication": "bearer",
     "headers": {
@@ -56,6 +64,40 @@ The parameters that the LLM decided to put into the REST API tool can become:
 }
 ```
 
+#### How to add your own tools
+
+You can make your `Agent` call any REST API you want by adding a REST API tool through:
+
+- `agent.add_restapi_tool()` (for ***Python***)
+- `agent.addRESTAPITool()` (for ***Node.js***).
+
+These functions get a ***tool definition***, and an ***authenticator*** optionally as their parameters.  
+- **Tool definition**: Object including type, description, and behavior of the tool
+- **Authenticator**(*optional*): Callable object that injects authentication to the REST API calls
+
+<CodeTabs>
+```python
+with Agent(...) as agent:
+  bearer_api_key = ...;
+
+  agent.add_restapi_tool(
+    {...},      # Tool definition
+    authenticator=BearerAuthenticator(bearer_api_key),
+  )
+```
+
+```typescript
+const agent = await defineAgent(...);
+
+const bearerApiKey = ...;
+
+agent.addRESTAPITool(
+  {...},      // Tool definition
+  { authenticator: bearerAutenticator(bearerApiKey) }
+);
+```
+</CodeTabs>
+
 ### Built-in tools
 
 Built-in tools uses the function of Ailoy’s internal module system. It work across all the environments supported. These tools are pre-registered and can be referenced by name.
@@ -64,6 +106,7 @@ Built-in tools uses the function of Ailoy’s internal module system. It work ac
 
 Defined by preset behavior implemented inside Ailoy. The only thing defined outside of Ailoy is the JMESPath query string(`outputPath`) to process the raw results of the function into useful data.
 
+***Tool definition*** for a built-in tool looks like:
 
 ```json
 {
@@ -75,6 +118,8 @@ Defined by preset behavior implemented inside Ailoy. The only thing defined outs
 }
 ```
 
+> *Built-in tools are not designed to be added at runtime.*
+
 ### Native tools
 
 Native tools allow developers to define custom Python functions that will be executed when the AI requests a tool call. This is useful for logic that lives inside your application.
@@ -82,6 +127,14 @@ Native tools allow developers to define custom Python functions that will be exe
 #### Behavior
 
 A Python or Node.js function or coroutine that will be called with arguments from the AI.
+
+#### How to add your own tools
+
+You can write your own tool as a native function and add it to the `Agent` through:
+- `agent.add_py_function_tool()` (for ***Python***)
+- `agent.addJsFunctionTool()` (for ***Node.js***).
+
+These functions get a ***custom native function*** and its ***tool description*** as their parameters.  
 
 <CodeTabs>
 ```python
@@ -159,7 +212,9 @@ agent.query("Evaluate sin(pi/2).")
 
 
 #### Example message to use this tool
-`Evaluate sin(pi/2).`
+`Evaluate sin(pi/2).`  
+`I want to know the value of sqrt(3^2 + 4^2).`  
+`Calculate "6/2*(1+2)"`
 
 ### Frankfurters (Currency exchange rates)
 A public API provided by the European Central Bank that provides currency exchange rate information.
@@ -182,10 +237,8 @@ agent.query("I want to buy 100 U.S. Dollar with my Korean Won. How much do I nee
 </CodeTabs>
 
 #### Example message to use this tool
-`I want to buy 100 U.S. Dollar with my Korean Won. How much do I need to take?`
-
-`Please summarize the current exchange rate situation of major currencies.`
-
+`I want to buy 100 U.S. Dollar with my Korean Won. How much do I need to take?`  
+`Please summarize the current exchange rate situation of major currencies.`  
 `I have 3000 yen, how much is this in USD?`
 
 ### TMDB
@@ -227,10 +280,8 @@ agent.query("Show me some famous movies recently.")
 </CodeTabs>
 
 #### Example message to use this tool
-`Show me some famous movies recently.`
-
-`Can you find me every Iron Man movies?`
-
+`Show me some famous movies recently.`  
+`Can you find me every Iron Man movies?`  
 `Recommend me some movies similar to Inception of Christopher Nolan.`
 
 
@@ -288,8 +339,6 @@ agent.query("Find me some articles about 'Agentic AI'.")
 </CodeTabs>
 
 #### Example message to use this tool
-`Find me some articles about 'Agentic AI'.`
-
-`News on financial market trends, please.`
-
+`Find me some articles about 'Agentic AI'.`  
+`News on financial market trends, please.`  
 `Search for the latest scientific research results.`
