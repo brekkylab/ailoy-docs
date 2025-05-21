@@ -59,7 +59,7 @@ It's also a great fit for secure or privacy-sensitive environments where cloud a
 **3. Versatility Across Architectures**
 
 Ailoy supports Windows, macOS, and Linux.
-And it works with both Python and Node.js environment.
+And it works with Python, Node.js and C++ environment.
 
 We're continuously expanding our platform and language coverage to make Ailoy available wherever developers build.
 
