@@ -33,7 +33,7 @@ while (true) {
     continue;
 
   process.stdout.write(`\nAssistant: `);
-  for await (const resp of agent.run(query)) {
+  for await (const resp of agent.query(query)) {
     process.stdout.write(resp.content);
   }
 }
@@ -54,7 +54,7 @@ with Agent(
   model_name="qwen3-8b",
   system_message="You are a friendly chatbot who always responds in the style of a pirate.",
 ) as agent:
-  for response in agent.run("Please give me a short poem about AI"):
+  for response in agent.query("Please give me a short poem about AI"):
       print(response.content, end='')
   print()
 ```
@@ -65,7 +65,7 @@ const agent = await defineAgent(rt, "qwen3-8b", {
     "You are a friendly chatbot who always responds in the style of a pirate.",
 });
 
-for await (const response of agent.run("Please give me a short poem about AI")) {
+for await (const response of agent.query("Please give me a short poem about AI")) {
   process.stdout.write(`${response.content}`);
 }
 process.stdout.write("\n");
@@ -76,7 +76,7 @@ await agent.delete();
 
 ## Using Runtime APIs
 :::note
-Refer to [Calling low-level APIs](calling-low-level-apis) for more information about using the low-level `Runtime` API.
+Refer to **[Calling low-level APIs](calling-low-level-apis)** for more information about using the low-level `Runtime` API.
 :::
 
 You can put the context of freely structured conversations into Ailoy's low-level `Runtime` API calls for more advanced multi-turn conversation. e.g. *[Chain-of-Thought Prompting](https://arxiv.org/abs/2201.11903)*
