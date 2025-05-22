@@ -51,7 +51,7 @@ To override system message, you can pass the system message string as the option
 ```python
 with Agent(
   rt,
-  model_name="qwen3-8b",
+  model_name="Qwen/Qwen3-8B",
   system_message="You are a friendly chatbot who always responds in the style of a pirate.",
 ) as agent:
   for response in agent.run("Please give me a short poem about AI"):
@@ -60,7 +60,7 @@ with Agent(
 ```
 
 ```typescript
-const agent = await defineAgent(rt, "qwen3-8b", {
+const agent = await defineAgent(rt, "Qwen/Qwen3-8B", {
   systemMessage:
     "You are a friendly chatbot who always responds in the style of a pirate.",
 });
