@@ -86,7 +86,7 @@ with Agent(...) as agent:
     bearer_api_key = ...;
 
     agent.add_restapi_tool(
-        {...},      # Tool definition
+        tool_def={...},      # Tool definition
         authenticator=BearerAuthenticator(bearer_api_key),
     )
 ```
