@@ -59,10 +59,10 @@ For more information on response format, refer to the **[Agent Response Format](
 
 ```python
 for resp in agent.query(question):
-  # skip printing when the response is related to tool calls
-  if resp.type in ("tool_call", "tool_call_result"):
-    continue
-  print(resp.content, end='')
+    # skip printing when the response is related to tool calls
+    if resp.type in ("tool_call", "tool_call_result"):
+        continue
+    print(resp.content, end='')
 ```
 
 ```typescript
@@ -88,24 +88,24 @@ from ailoy import Runtime, Agent
 rt = Runtime()
 
 with Agent(rt, model_name="qwen3-8b") as agent:
-  # Attach frankfurter's API
-  agent.add_tools_from_preset("frankfurter")
+    # Attach frankfurter's API
+    agent.add_tools_from_preset("frankfurter")
 
-  question = "I want to buy 250 U.S. Dollar and 350 Chinese Yuan with my Korean Won. How much do I need to take?"
-  print(f"Question: {question}\n")
-  for resp in agent.query(question):
-    if resp.type == "output_text":
-      print(resp.content, end='')
-    elif resp.type == "tool_call":
-      tool_name = resp.content.function.name
-      tool_arguments = resp.content.function.arguments
-      print(f"Tool call: {tool_name}({', '.join(f'{k}="{v}"' for k, v in tool_arguments.items())})\n")
-    elif resp.type == "tool_call_result":
-      tool_result = resp.content
-      print(f"Tool result: {tool_result.content}\n")
-    else:
-      raise TypeError("Unexpected response type.")
-  print()
+    question = "I want to buy 250 U.S. Dollar and 350 Chinese Yuan with my Korean Won. How much do I need to take?"
+    print(f"Question: {question}\n")
+    for resp in agent.query(question):
+        if resp.type == "output_text":
+            print(resp.content, end='')
+        elif resp.type == "tool_call":
+            tool_name = resp.content.function.name
+            tool_arguments = resp.content.function.arguments
+            print(f"Tool call: {tool_name}({', '.join(f'{k}="{v}"' for k, v in tool_arguments.items())})\n")
+        elif resp.type == "tool_call_result":
+            tool_result = resp.content
+            print(f"Tool result: {tool_result.content}\n")
+        else:
+            raise TypeError("Unexpected response type.")
+    print()
 
 rt.stop()
 ```
@@ -211,32 +211,32 @@ rt = Runtime()
 agent = Agent(rt, model_name="qwen3-8b")
 
 frankfurter = {
-  "type": "restapi",
-  "description": {
-    "name": "frankfurter",
-    "description": "Get the latest currency exchange rates of target currencies based on the 'base' currency",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "base": {
-          "type": "string",
-          "description": "The ISO 4217 currency code to be the divider of the currency rate to be got."
-        },
-        "symbols": {
-          "type": "string",
-          "description": "The target ISO 4217 currency codes separated by comma."
+    "type": "restapi",
+    "description": {
+        "name": "frankfurter",
+        "description": "Get the latest currency exchange rates of target currencies based on the 'base' currency",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "base": {
+                    "type": "string",
+                    "description": "The ISO 4217 currency code to be the divider of the currency rate to be got."
+                },
+                "symbols": {
+                    "type": "string",
+                    "description": "The target ISO 4217 currency codes separated by comma."
+                }
+            },
         }
-      },
-    }
-  },
-  "behavior": {
-    "baseURL": "https://api.frankfurter.dev/v1/latest",
-    "method": "GET",
-    "headers": {
-      "accept": "application/json"
     },
-    "outputPath": "rates"
-  },
+    "behavior": {
+        "baseURL": "https://api.frankfurter.dev/v1/latest",
+        "method": "GET",
+        "headers": {
+            "accept": "application/json"
+        },
+        "outputPath": "rates"
+    },
 }
 agent.add_restapi_tool(frankfurter)
 ```

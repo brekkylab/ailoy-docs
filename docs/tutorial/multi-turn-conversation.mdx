@@ -10,16 +10,16 @@ Ailoy's high-level API `Agent` maintains the query/response history, so a multi-
 
 ```python
 with Agent(...) as agent:
-  while True:
-    query = input("\nUser: ")
+    while True:
+        query = input("\nUser: ")
 
-    if query == "exit":
-        break
-    if query == "":
-        continue
+        if query == "exit":
+            break
+        if query == "":
+            continue
 
-    for resp in agent.query(query):
-      print(resp.content, end="")
+        for resp in agent.query(query):
+            print(resp.content, end="")
 ```
 
 ```typescript
@@ -50,13 +50,13 @@ To override system message, you can pass the system message string as the option
 
 ```python
 with Agent(
-  rt,
-  model_name="qwen3-8b",
-  system_message="You are a friendly chatbot who always responds in the style of a pirate.",
+    rt,
+    model_name="qwen3-8b",
+    system_message="You are a friendly chatbot who always responds in the style of a pirate.",
 ) as agent:
-  for response in agent.query("Please give me a short poem about AI"):
-      print(response.content, end='')
-  print()
+    for response in agent.query("Please give me a short poem about AI"):
+        print(response.content, end='')
+    print()
 ```
 
 ```typescript
@@ -87,17 +87,17 @@ In theory, an LLM generates responses based only on the context provided at the 
 
 ```python
 with Runtime() as rt:
-  rt.define("tvm_language_model", "lm0", {"model": "Qwen/Qwen3-8B"})
+    rt.define("tvm_language_model", "lm0", {"model": "Qwen/Qwen3-8B"})
 
-  messages = [
-    {"role": "user", "content": "if a>1, what is the sum of the real solutions of 'sqrt(a-sqrt(a+x))=x'?"},
-    {"role": "assistant", "content": "Let's think step by step."},  # Chain-of-Thought prompt
-  ]
+    messages = [
+        {"role": "user", "content": "if a>1, what is the sum of the real solutions of 'sqrt(a-sqrt(a+x))=x'?"},
+        {"role": "assistant", "content": "Let's think step by step."},  # Chain-of-Thought prompt
+    ]
 
-  for resp in rt.call_iter_method("lm0", "infer", {"messages": messages}):
-      print(resp["message"]["content"], end='')
+    for resp in rt.call_iter_method("lm0", "infer", {"messages": messages}):
+        print(resp["message"]["content"], end='')
 
-  rt.delete("lm0")
+    rt.delete("lm0")
 ```
 
 ```typescript
@@ -131,17 +131,17 @@ To override the system message, you can include a message with `"role": "system"
 
 ```python
 with Runtime() as rt:
-  rt.define("tvm_language_model", "lm0", {"model": "Qwen/Qwen3-8B"})
+    rt.define("tvm_language_model", "lm0", {"model": "Qwen/Qwen3-8B"})
 
-  messages = [
-    {"role": "system", "content": "You are a friendly chatbot who always responds in the style of a pirate."},
-    {"role": "user", "content": "Who are you?"},
-  ]
+    messages = [
+        {"role": "system", "content": "You are a friendly chatbot who always responds in the style of a pirate."},
+        {"role": "user", "content": "Who are you?"},
+    ]
 
-  for resp in rt.call_iter_method("lm0", "infer", {"messages": messages}):
-      print(resp["message"]["content"], end='')
+    for resp in rt.call_iter_method("lm0", "infer", {"messages": messages}):
+        print(resp["message"]["content"], end='')
 
-  rt.delete("lm0")
+    rt.delete("lm0")
 ```
 
 ```typescript
