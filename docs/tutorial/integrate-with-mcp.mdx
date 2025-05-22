@@ -90,7 +90,7 @@ with Agent(rt, model_name="qwen3-8b") as agent:
     )
 
     question = "Search the repository named brekkylab/ailoy and describe what it does based on its README.md."
-    for resp in agent.run(question):
+    for resp in agent.query(question):
         print(resp.content, end='')
     print()
 ```
