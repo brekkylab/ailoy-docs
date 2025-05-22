@@ -80,7 +80,7 @@ from ailoy import Runtime, Agent
 from mcp import StdioServerParameters
 
 rt = Runtime()
-with Agent(rt, model_name="qwen3-8b") as agent:
+with Agent(rt, model_name="Qwen/Qwen3-8B") as agent:
     # Add tools from Github MCP server
     agent.add_tools_from_mcp_server(
         StdioServerParameters(
@@ -100,7 +100,7 @@ import { startRuntime, createAgent } from "ailoy-node";
 
 (async () => {
   const rt = await startRuntime();
-  const agent = await createAgent(rt, { model: { name: "qwen3-8b" } });
+  const agent = await createAgent(rt, { model: { name: "Qwen/Qwen3-8B" } });
 
   // Add tools from Github MCP server
   await agent.addToolsFromMcpServer({
