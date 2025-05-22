@@ -1,0 +1,87 @@
+# Devices
+
+On-device AI is one of the key feature of Ailoy. 
+
+## Required available VRAM
+
+{/* prettier-ignore-start */}
+
+:::warning
+These values may vary depending on the environment and circumstances.
+:::
+
+{/* prettier-ignore-end */}
+
+Requirements for available VRAM size by models are estimated as follows:
+
+| Model           | VRAM    |
+|-----------------|:-------:|
+|`Qwen/Qwen3-0.6B`| ≈ 4.3GB |
+|`Qwen/Qwen3-1.7B`| ≈ 5.0GB |
+|`Qwen/Qwen3-4B`  | ≈ 7.3GB |
+|`Qwen/Qwen3-8B`  | ≈ 8.2GB |
+
+
+## Environments
+
+
+
+### Device selection
+
+In some cases, you may want to exploit Ailoy in an environment with multiple accelerators, in which case you may want to select the accelerator on which to run AI.  
+e.g.) Running Embedding model and Language model on separate devices
+
+Each AI model exists as a component in Ailoy, and you can run it by setting the device ID for the corresponding component.
+
+#### Using Agent & VectorStore
+
+<CodeTabs>
+
+```python
+agent = Agent(runtime, "Qwen/Qwen3-8B", attrs={"device": 1})
+vs = VectorStore(runtime, "BAAI/bge-m3", "faiss", embedding_model_attrs={"device": 0})
+
+vs.insert(a_long_document_text)
+
+query = "What is Ailoy?"
+items = vs.retrieve(query)
+
+prompt = f"""
+  Based on the following contexts, answer to user's question.
+  Context: {[item.document for item in items]}
+  Question: {query}
+"""
+for resp in agent.query(prompt):
+  agent.print(resp)
+
+agent.delete()
+vs.delete()
+```
+
+```typescript
+const agent = await defineAgent(rt, "Qwen/Qwen3-8B", { device : 1 });
+const vs = await defineVectorStore(rt, "BAAI/bge-m3", "faiss", { device : 0 });
+...
+```
+</CodeTabs>
+
+#### Using Runtime APIs
+
+<CodeTabs>
+
+```python
+rt.define("tvm_language_model", "lm0", {"model": "Qwen/Qwen3-8B", "device": 1})
+rt.define("tvm_embedding_model", "em0", {"model": "BAAI/bge-m3", "device": 0})
+```
+
+```typescript
+await rt.define("tvm_language_model", "lm0", {
+  model: "Qwen/Qwen3-8B",
+  device: 1,
+});
+await rt.define("tvm_embedding_model", "lm0", {
+  model: "Qwen/Qwen3-8B",
+  device: 9,
+});
+```
+</CodeTabs>
